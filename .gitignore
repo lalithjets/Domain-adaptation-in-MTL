@@ -1,0 +1,16 @@
+*.ipynb_checkpoints/
+.vscode/
+annotations_new/
+checkpoints/
+datasets/
+feature_extractor/checkpoint
+log/
+old_depricated/
+results/
+venv/
+
+tmp*
+*.jar
+
+*__pycache__
+*.pyc
