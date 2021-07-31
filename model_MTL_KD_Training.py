@@ -37,6 +37,9 @@ from evaluation.graph_eval import *
 # feature extractor
 from models.feature_extractor import *
 
+
+from scipy.spatial.distance import euclidean
+
 # Random seeds
 seed = 27
 random.seed(seed)
@@ -138,8 +141,7 @@ class Dataset(object):
         gsu_data['edge_num'] = gsu_data['edge_labels'].shape[0]
         gsu_data['spatial_feat'] = frame_data['spatial_features'][:]
         gsu_data['word2vec'] = self._get_word2vec(gsu_data['roi_labels'])
-        if self.fields['image'] == None: gsu_data['features'] = np.zeros((gsu_data['node_num'],512), dtype = np.float32)
-        else: gsu_data['features'] = frame_data['node_features'][:]
+        gsu_data['features'] = np.zeros((gsu_data['node_num'],512), dtype = np.float32) if self.fields['image'] == None else frame_data['node_features'][:]
         
         data = {}
         data['cp_data'] = cp_data
@@ -231,7 +233,6 @@ class MTL_DATASET(PairedDataset):
         roots = {}
         roots['train'] = { 'img': img_root, 'cap': os.path.join(ann_root, 'captions_train.json')}
         roots['val'] = {'img': img_root, 'cap': os.path.join(ann_root, 'captions_val.json')}
-
         # Getting the id: planning to remove this in future
         if id_root is not None:
             ids = {}
@@ -269,6 +270,21 @@ class MTL_DATASET(PairedDataset):
         return train_samples, val_samples
 
 
+class model_transform(nn.Module):
+    def __init__(self):
+        super(model_transform, self).__init__()
+        #self.conv1 = nn.Conv2d(512, 512, 1, bias=False)
+        self.conv1 = nn.Conv1d(1, 1, 1, bias=False)
+        for m in self.modules():
+            if isinstance(m, nn.Conv2d): nn.init.xavier_normal_(m.weight)
+            elif isinstance(m, nn.BatchNorm2d): nn.init.constant_(m.weight, 1)
+            elif isinstance(m, nn.Linear): nn.init.xavier_normal_(m.weight)
+
+    def forward(self, inputs):
+        result = self.conv1(inputs.unsqueeze(1))
+        return result.squeeze(1)
+
+
 class mtl_model(nn.Module):
     '''
     Multi-task model : Graph Scene Understanding and Captioning
@@ -281,48 +297,56 @@ class mtl_model(nn.Module):
         self.caption = caption
         self.transform = torchvision.transforms.Compose([torchvision.transforms.ToTensor()])
     
-    def forward(self, img_dir, det_boxes_all, caps_gt, node_num, features, spatial_feat, word2vec, roi_labels, val = False, text_field = None):               
+    def forward(self, img_dir, det_boxes_all, caps_gt, node_num, spatial_feat, word2vec, roi_labels, val = False, text_field = None):               
         
-        gsu_node_feat = None
+        fe_feature = None
         cp_node_feat = None
+        gsu_node_feat = None
 
         # feature extraction model
         for index, img_loc in  enumerate(img_dir):
             _img = Image.open(img_loc).convert('RGB')
             _img = np.array(_img)
             img_stack = None
-            for idx, bndbox in enumerate(det_boxes_all[index]):        
+            for bndbox in det_boxes_all[index]:        
                 roi = np.array(bndbox).astype(int)
                 roi_image = _img[roi[1]:roi[3] + 1, roi[0]:roi[2] + 1, :]
                 roi_image = self.transform(cv2.resize(roi_image, (224, 224), interpolation=cv2.INTER_LINEAR))
                 roi_image = torch.autograd.Variable(roi_image.unsqueeze(0))
                 # stack nodes images per image
-                if img_stack is None: img_stack = roi_image
-                else: img_stack = torch.cat((img_stack, roi_image))
+                img_stack = roi_image if img_stack == None else torch.cat((img_stack, roi_image))
             
             img_stack = img_stack.cuda()
-            # send the stack to feature extractor
-            vis_feature = self.feature_extractor(img_stack)
-            vis_feature = vis_feature.view(vis_feature.size(0), -1)
+            img_stack = self.feature_extractor(img_stack)
             
-            if gsu_node_feat == None: gsu_node_feat = vis_feature
-            else: gsu_node_feat = torch.cat((gsu_node_feat,vis_feature))
+            # prepare FE
+            # fe_feature = img_stack if fe_feature == None else torch.cat((fe_feature,img_stack))
             
-            vis_feature = torch.unsqueeze(torch.cat((vis_feature,torch.zeros((6-len(vis_feature)),512).cuda())),0)
-            if cp_node_feat == None: cp_node_feat = vis_feature
-            else: cp_node_feat = torch.cat((cp_node_feat,vis_feature))
+            # prepare graph node features  
+            gsu_node_feat = img_stack.view(img_stack.size(0), -1) if gsu_node_feat == None else torch.cat((gsu_node_feat,img_stack.view(img_stack.size(0), -1)))
+            
+            # prepare caption node features
+            #node_feature = img_stack.view(img_stack.size(0), -1)
+            #node_feature = torch.unsqueeze(torch.cat((node_feature,torch.zeros((6-len(node_feature)),512).cuda())),0)
+            #cp_node_feat = node_feature if cp_node_feat == None else 
+            if cp_node_feat == None:
+                cp_node_feat = torch.unsqueeze(torch.cat((img_stack.view(img_stack.size(0), -1),torch.zeros((6-len(det_boxes_all[index])),512).cuda())),0)
+            else: 
+                cp_node_feat = torch.cat((cp_node_feat,torch.unsqueeze(torch.cat((img_stack.view(img_stack.size(0), -1),torch.zeros((6-len(det_boxes_all[index])),512).cuda())),0)))
     
         # caption model
-        if val == True: caption_output, _ = self.caption.beam_search(cp_node_feat, 20, text_field.vocab.stoi['<eos>'], 5, out_size=1)
-        else: caption_output = self.caption(cp_node_feat, caps_gt)
+        if val == True: 
+            caption_output, _ = self.caption.beam_search(cp_node_feat, 20, text_field.vocab.stoi['<eos>'], 5, out_size=1)
+        else: 
+            caption_output = self.caption(cp_node_feat, caps_gt)
         
         # graph su model
         interaction = self.graph_su(node_num, gsu_node_feat, spatial_feat, word2vec, roi_labels, validation= val)
         
-        return interaction, caption_output
+        return interaction, caption_output, fe_feature
 
 
-def build_model(args, text_field, device, pretrained_model = True):
+def build_model(args, text_field, device, load_pretrained = True):
     '''
     Build MTL model
     1) Feature Extraction
@@ -332,15 +356,15 @@ def build_model(args, text_field, device, pretrained_model = True):
 
     ''' ==== caption model ===='''
     # caption encoder
-    if args.cp_cbs == 'True':encoder = MemoryAugmentedEncoder_CBS(3, 0, attention_module=ScaledDotProductAttentionMemory, attention_module_kwargs={'m': args.m})
+    if args.cp_cbs:encoder = MemoryAugmentedEncoder_CBS(3, 0, attention_module=ScaledDotProductAttentionMemory, attention_module_kwargs={'m': args.m})
     else: encoder = MemoryAugmentedEncoder(3, 0, attention_module=ScaledDotProductAttentionMemory, attention_module_kwargs={'m': args.m}) 
     # caption decoder
     decoder = MeshedDecoder(len(text_field.vocab), 54, 3, text_field.vocab.stoi['<pad>'])
     # caption model
     caption_model = Transformer(text_field.vocab.stoi['<bos>'], encoder, decoder).to(device)
-    if args.cp_cbs == 'True': caption_model.encoder.get_new_kernels(0, args.cp_kernel_sizex, args.cp_kernel_sizey, args.cp_decay_epoch, args.cp_std_factor, args.cp_cbs_filter)
+    if args.cp_cbs: caption_model.encoder.get_new_kernels(0, args.cp_kernel_sizex, args.cp_kernel_sizey, args.cp_decay_epoch, args.cp_std_factor, args.cp_cbs_filter)
     # caption load pre-trained weights
-    if pretrained_model:
+    if load_pretrained:
         pretrained_model = torch.load(args.cp_checkpoint+('%s_best.pth' % args.exp_name))
         caption_model.load_state_dict(pretrained_model['state_dict']) 
 
@@ -349,7 +373,7 @@ def build_model(args, text_field, device, pretrained_model = True):
     graph_su_model = AGRNN(bias= True, bn= False, dropout=0.3, multi_attn=False, layer=1, diff_edge=False, use_cbs = args.gsu_cbs)
     if args.gsu_cbs: graph_su_model.grnn1.gnn.apply_h_h_edge.get_new_kernels(0)
     # graph load pre-trained weights
-    if pretrained_model:
+    if load_pretrained:
         pretrained_model = torch.load(args.gsu_checkpoint)
         graph_su_model.load_state_dict(pretrained_model['state_dict'])
     #graph_su_model.eval()
@@ -368,8 +392,8 @@ def build_model(args, text_field, device, pretrained_model = True):
         if args.fe_use_SC: feature_network.encoder = nn.DataParallel(feature_network.encoder) #feature_network = feature_network.cuda()
         else: feature_network = nn.DataParallel(feature_network, device_ids=device_ids)
     # feature extraction pre-trained weights
-    if pretrained_model:
-        feature_network.load_state_dict(torch.load(args.fe_modelpath))
+    # if pretrained_model:
+    feature_network.load_state_dict(torch.load(args.fe_modelpath))
     # extract the encoder layer
     if args.fe_use_SC: feature_network = feature_network.encoder
     else:
@@ -401,27 +425,24 @@ def eval_mtl(model, dataloader, text_field):
     
     for it, data in tqdm(enumerate(iter(dataloader))):
             
-        graph_data = data['gsu']
-        cp_data = data['cp']
-            
         # graph
         #img_name = graph_data['img_name']
         #edge_num = graph_data['edge_num']
-        img_loc = graph_data['img_loc']
-        node_num = graph_data['node_num']
-        roi_labels = graph_data['roi_labels']
-        det_boxes = graph_data['det_boxes']
-        edge_labels = graph_data['edge_labels']
-        features = graph_data['features']
-        spatial_feat = graph_data['spatial_feat']
-        word2vec = graph_data['word2vec']
-        features, spatial_feat, word2vec, edge_labels = features.to(device), spatial_feat.to(device), word2vec.to(device), edge_labels.to(device)         
+        img_loc = data['gsu']['img_loc']
+        node_num = data['gsu']['node_num']
+        roi_labels = data['gsu']['roi_labels']
+        det_boxes = data['gsu']['det_boxes']
+        edge_labels = data['gsu']['edge_labels']
+        #features = data['gsu']['features']
+        spatial_feat = data['gsu']['spatial_feat']
+        word2vec =data['gsu']['word2vec']
+        spatial_feat, word2vec, edge_labels = spatial_feat.to(device), word2vec.to(device), edge_labels.to(device)         
         
-        _, caps_gt = cp_data
+        _, caps_gt = data['cp']
             
         with torch.no_grad():              
     
-            g_output, caption_out = model(img_loc, det_boxes, caps_gt, node_num, features, spatial_feat, word2vec, roi_labels, val = True, text_field = text_field)
+            g_output, caption_out, _ = model(img_loc, det_boxes, caps_gt, node_num, spatial_feat, word2vec, roi_labels, val = True, text_field = text_field)
         
             g_logits_list.append(g_output)
             g_labels_list.append(edge_labels)
@@ -456,26 +477,174 @@ def eval_mtl(model, dataloader, text_field):
     scores, _ = evaluation.compute_scores(gts, gen)
     print('Graph : {acc: %0.6f map: %0.6f loss: %0.6f, ece:%0.6f, sce:%0.6f, tace:%0.6f, brier:%.6f, uce:%.6f}' %(g_total_acc, g_map_value, g_total_loss, g_ece, g_sce, g_tace, g_brier, g_uce.item()) )
     print(print("Caption Scores :", scores))
+    return g_total_acc, g_map_value, scores['CIDEr']
+
+
+def train(args, model, device, dataloader, dict_dataloader_val, text_field, stl_models = None, model_transforms = None):
+    '''
+    Finding optimal temperature scale for graph scene understanding task
+    '''
+
+    best_value = [0.0, 0.0, 0.0]
+    best_epoch = [0, 0, 0]
+
+    # loss function
+    g_criterion = nn.MultiLabelSoftMarginLoss()
+    c_criterion = CELossWithLS(classes=len(text_field.vocab), smoothing=0.0, gamma=0.0, isCos=False, ignore_index=text_field.vocab.stoi['<pad>'])
+
+    # optimizer
+    #optimizer = optim.SGD(model.feature_extractor.parameters(), lr= args.lr, momentum=0.9, weight_decay=0)
+    #optimizer = optim.Adam(model.parameters(), lr=args.lr, betas=(0.9, 0.98))
+    #scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=50, gamma=0.8)
+    
+    if args.KD_MTL:
+        #optimizer = optim.Adam(model.parameters(), lr=1e-4)
+        params = []
+        for i in range(len(stl_models)):
+            params += model_transforms[i].parameters()
+        model_transforms_optimizer = optim.Adam(params, lr=args.alr, weight_decay=5e-4)
+    
+    for epoch_count in range(args.epoch):
+        
+        model.train()
+
+        print("=========== Train ===============")
+        running_loss = 0.0
+        running_g_acc = 0.0
+        running_edge_count = 0
+        iters = 0
+        
+        # update CBS layers
+        if args.cp_cbs:
+            model.caption.encoder.get_new_kernels(epoch_count, args.cp_kernel_sizex, args.cp_kernel_sizey, args.cp_decay_epoch, args.cp_std_factor, args.cp_cbs_filter) 
+        if args.gsu_cbs:
+            model.graph_su.grnn1.gnn.apply_h_h_edge.get_new_kernels(epoch_count)
+        model = model.to(device)
+        
+        #scheduler.step()
+        optimizer = optim.Adam(model.parameters(), lr= args.lr, weight_decay=0)
+        
+        for data in tqdm(iter(dataloader)):
+            iters += 1
+
+            # graph
+            img_loc = data['gsu']['img_loc']
+            node_num = data['gsu']['node_num']
+            roi_labels = data['gsu']['roi_labels']
+            det_boxes = data['gsu']['det_boxes']
+            edge_labels = data['gsu']['edge_labels']
+            #features = data['gsu']['features']
+            spatial_feat = data['gsu']['spatial_feat']
+            word2vec = data['gsu']['word2vec']
+            spatial_feat, word2vec, edge_labels = spatial_feat.to(device), word2vec.to(device), edge_labels.to(device)    
+            
+            # caption
+            caption_nodes, caps_gt = data['cp']
+            caption_nodes, caps_gt = caption_nodes.to(device), caps_gt.to(device)
+            
+            #model.zero_grad()
+            interaction, caption_output, fe_feat = model(img_loc, det_boxes, caps_gt, node_num, spatial_feat, word2vec, roi_labels, val = False)
+            
+            # graph loss and acc
+            g_loss = g_criterion(interaction, edge_labels.float())
+            interaction = F.softmax(interaction, dim=1)
+            g_acc = np.sum(np.equal(np.argmax(interaction.cpu().data.numpy(), axis=-1), np.argmax(edge_labels.cpu().data.numpy(), axis=-1)))
+                    
+            # caption loss
+            c_loss = c_criterion(caption_output[:, :-1].contiguous(), caps_gt[:, 1:].contiguous())
+            
+            if args.KD_MTL:
+                dist_loss = []
+                for i in range(len(stl_models)):
+                    #stl_models[i].eval()
+                    with torch.no_grad():
+                        _, _, feat_ti = stl_models[i](img_loc, det_boxes, caps_gt, node_num, spatial_feat, word2vec, roi_labels, val = False)
+                    
+                    # features from STL
+                    feat_ti = feat_ti.detach()
+                    #feat_ti = feat_ti / (feat_ti.pow(2).sum(1) + 1e-6).sqrt().view(feat_ti.size(0), 1, feat_ti.size(2), feat_ti.size(3))
+                    
+                    # features from MTL
+                    feat_si = model_transforms[i](fe_feat)
+                    #feat_si = feat_si / (feat_si.pow(2).sum(1) + 1e-6).sqrt().view(feat_si.size(0), 1, feat_si.size(2), feat_si.size(3))
+                    
+                    # distillaiton loss
+                    # calculate distance
+                    dist_0 = (feat_si - feat_ti).pow(2).sum(1).mean()
+                    dist_loss.append(dist_0)
+                
+                lambda_ = [1, 1]
+                dist_loss = sum(dist_loss[i] * lambda_[i] for i in range(len(stl_models)))
+
+            
+            #uda:
+            #loss = (0.5 * g_loss) + (0.5 * c_loss)
+            #uda_graph:
+            #loss = g_loss
+            #uda_caption:
+            loss = c_loss
+            if args.KD_MTL: loss = loss + dist_loss
+
+            optimizer.zero_grad()
+            if args.KD_MTL: model_transforms_optimizer.zero_grad()
+            
+            # back propagation
+            loss.backward()
+            optimizer.step()
+            if args.KD_MTL: model_transforms_optimizer.step()
+            
+            running_loss += loss.item()
+            running_g_acc += g_acc
+            running_edge_count += edge_labels.shape[0]
+            #break
+        epoch_loss = running_loss/float(iters)
+        epoch_g_acc = running_g_acc/float(running_edge_count)
+        print("[{}] Epoch: {}/{} MTL_Loss: {:0.6f} Graph_Acc: {:0.6f}".format(\
+                            'MTL-Train', epoch_count+1, args.epoch, epoch_loss, epoch_g_acc))
+        
+        checkpoint = {'state_dict': model.state_dict()}
+        save_name = "checkpoints/mtl_train/"+args.mtl_version+"/checkpoint_" + str(epoch_count+1) + '_epoch.pth'
+        torch.save(checkpoint, os.path.join(save_name))
+        
+        print("=========== Evaluation ===============")
+        eval_sc_acc, eval_sc_map, eval_cap_cider = eval_mtl(model, dict_dataloader_val, text_field)
+        if eval_sc_acc > best_value[0]:
+            best_value[0] = eval_sc_acc
+            best_epoch[0] = epoch_count+1
+        if eval_sc_map > best_value[1]:
+            best_value[1] = eval_sc_map
+            best_epoch[1] = epoch_count+1
+        if eval_cap_cider > best_value[2]:
+            best_value[2] = eval_cap_cider
+            best_epoch[2] = epoch_count+1
+        print("Best SC ACC: [Epoch: {} value: {:0.4f}] Best SC mAP: [Epoch: {} value: {:0.4f}] Best Cap Cider: [Epoch: {} value: {:0.4f}]".format(\
+                    best_epoch[0], best_value[0], best_epoch[1], best_value[1], best_epoch[2], best_value[2]))
+
+    return
 
 
 if __name__ == "__main__":
     
-    os.environ["CUDA_VISIBLE_DEVICES"]="1,2"
+    os.environ["CUDA_VISIBLE_DEVICES"]="0"
     device = torch.device('cuda')
+    print(device)
     # arguments
     parser = argparse.ArgumentParser(description='Incremental domain adaptation for surgical report generation')
-    parser.add_argument('--batch_size',            type=int,       default=8)
+    parser.add_argument('--batch_size',            type=int,       default=4)
     parser.add_argument('--workers',               type=int,       default=0)
     parser.add_argument('--epoch',                 type=int,       default=100)
+    parser.add_argument('--lr',                    type=float,     default=0.0000085)
+    parser.add_argument('--alr',                   type=float,     default=0.001)
+    
     # caption
     parser.add_argument('--exp_name',              type=str,       default='m2_transformer')
     parser.add_argument('--m',                     type=int,       default=40)   
-    parser.add_argument('--cp_cbs',                type=str,       default='True')
+    parser.add_argument('--cp_cbs',                type=bool,       default=True)
     parser.add_argument('--cp_cbs_filter',         type=str,       default='LOG') # Potential choice: 'gau' and 'LOG'
     parser.add_argument('--cp_kernel_sizex',       type=int,       default=3)
     parser.add_argument('--cp_kernel_sizey',       type=int,       default=1)
-    parser.add_argument('--cp_decay_epoch',        type=int,       default=2) 
-    parser.add_argument('--cp_std_factor',         type=float,     default=0.9)
+    parser.add_argument('--cp_decay_epoch',        type=int,       default=20) 
+    parser.add_argument('--cp_std_factor',         type=float,     default=0.985)
     # graph
     parser.add_argument('--gsu_cbs',               type=bool,      default=True)
     parser.add_argument('--gsu_feat',              type=str,       default='resnet18_09_SC_CBS')
@@ -493,33 +662,28 @@ if __name__ == "__main__":
     parser.add_argument('--fe_use_SC',             type=bool,      default=True,        help='use SuperCon')
     # SD file dirs
     parser.add_argument('--cp_features_path',      type=str,       default='datasets/instruments18/') 
-    parser.add_argument('--cp_annotation_folder',  type=str,       default='annotations_new/annotations_SD_inc')
+    parser.add_argument('--cp_annotation_folder',  type=str,       default='datasets/caption_annotations_SC_CBS/annotations_SD_base')
     parser.add_argument('--gsu_img_dir',           type=str,       default='left_frames')
     parser.add_argument('--gsu_file_dir',          type=str,       default='datasets/instruments18/')
     # TD file dirs
     # parser.add_argument('--cp_features_path',      type=str,       default='datasets/SGH_dataset_2020/') 
-    # parser.add_argument('--cp_annotation_folder',  type=str,       default='annotations_new/annotations_TD_inc')
-    # parser.add_argument('--gsu_img_dir',           type=str,       default='resized_frames')
-    # parser.add_argument('--gsu_file_dir',          type=str,       default='datasets/SGH_dataset_2020/')
-    # SD file dirs
-    # parser.add_argument('--cp_features_path',      type=str,       default='datasets/instruments18/') 
-    # parser.add_argument('--cp_annotation_folder',  type=str,       default='datasets/annotations_new/annotations_SD_inc')
-    # parser.add_argument('--gsu_img_dir',           type=str,       default='left_frames')
-    # parser.add_argument('--gsu_file_dir',          type=str,       default='datasets/instruments18/')
-    # TD file dirs
-    # parser.add_argument('--cp_features_path',      type=str,       default='datasets/SGH_dataset_2020/') 
-    # parser.add_argument('--cp_annotation_folder',  type=str,       default='datasets/annotations_new/annotations_sgh_inc')
+    # parser.add_argument('--cp_annotation_folder',  type=str,       default='datasets/caption_annotations_SC_CBS/annotations_TD_base')
     # parser.add_argument('--gsu_img_dir',           type=str,       default='resized_frames')
     # parser.add_argument('--gsu_file_dir',          type=str,       default='datasets/SGH_dataset_2020/')
     # checkpoints dir
     # non-common extractor, MTL, UDA, trained only on SD
-    parser.add_argument('--cp_checkpoint',         type=str,       default='checkpoints/IDA_MICCAI2021_checkpoints/SD_base_LOG/')
+    parser.add_argument('--cp_checkpoint',         type=str,       default='checkpoints/c_checkpoints/SD_base_LOG/')
     parser.add_argument('--gsu_checkpoint',        type=str,       default='checkpoints/g_checkpoints/da_ecbs_resnet18_09_SC_eCBS/da_ecbs_resnet18_09_SC_eCBS/epoch_train/checkpoint_D1230_epoch.pth')
     parser.add_argument('--fe_modelpath',          type=str,       default='feature_extractor/checkpoint/incremental/inc_ResNet18_SC_CBS_0_012345678.pkl')
-    parser.add_argument('--mtl_version',           type=str,       default='UDA_balanced_loss')
+    parser.add_argument('--mtl_version',           type=str,       default='UDA_base_caption')
+    # MTL
+    parser.add_argument('--KD_MTL',                type=bool,      default=False,        help='KL Based MTL')
+    parser.add_argument('--STL_cp_checkpoint',     type=str,       default='NIL')
+    parser.add_argument('--STL_gsu_checkpoint',    type=str,       default='NIL')
     args = parser.parse_args()
     print(args)
 
+    
     # graph scene understanding constants
     gsu_const = {}
     gsu_const['file_dir'] = args.gsu_file_dir
@@ -558,15 +722,28 @@ if __name__ == "__main__":
     dict_dataloader_val = DataLoader(dict_dataset_val, batch_size=args.batch_size) # for caption with word GT class number
 
     '''==== MTL-model ===='''
-    model = build_model(args, text_field, device, pretrained_model=False)
-
-    #'''==== First evaluation MTL ===='''
-    #eval_mtl(model, dict_dataloader_val, text_field)
+    model = build_model(args, text_field, device, load_pretrained=False)
     
-    '''==== Evaluate model ===='''
-    for i in range(1,20):
-        # MTL
-        pretrained_model = torch.load('checkpoints/mtl_train/UDA_Graph/checkpoint_'+str(i)+'_epoch.pth')
-        model.load_state_dict(pretrained_model['state_dict'])
-        print('epoch:',i)
-        eval_mtl(model, dict_dataloader_val, text_field)
+    if args.KD_MTL:
+        single_model = {}
+        model_transforms = {}
+    
+        single_model[0] = build_model(args, text_field, device, load_pretrained=False)
+        checkpoint = torch.load(args.STL_cp_checkpoint)
+        single_model[0].load_state_dict(checkpoint['state_dict'])
+        model_transforms[0] = model_transform().cuda()
+
+        single_model[1] = build_model(args, text_field, device, load_pretrained=False)
+        checkpoint = torch.load(args.STL_gsu_checkpoint)
+        single_model[1].load_state_dict(checkpoint['state_dict'])
+        model_transforms[1] = model_transform().cuda()
+
+    '''==== First evaluation MTL ===='''
+    eval_mtl(model, dict_dataloader_val, text_field)
+
+    '''==== MTL-Train model ===='''
+    # train for 100 epoch
+    if args.KD_MTL:
+        train(args, model, device, train_dataloader, dict_dataloader_val, text_field, stl_models = single_model, model_transforms = model_transforms)
+    else:
+        train(args, model, device, train_dataloader, dict_dataloader_val, text_field)

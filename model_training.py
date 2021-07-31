@@ -322,7 +322,7 @@ class mtl_model(nn.Module):
         return interaction, caption_output
 
 
-def build_model(args, text_field, device):
+def build_model(args, text_field, device, pretrained_model = True):
     '''
     Build MTL model
     1) Feature Extraction
@@ -340,16 +340,18 @@ def build_model(args, text_field, device):
     caption_model = Transformer(text_field.vocab.stoi['<bos>'], encoder, decoder).to(device)
     if args.cp_cbs == 'True': caption_model.encoder.get_new_kernels(0, args.cp_kernel_sizex, args.cp_kernel_sizey, args.cp_decay_epoch, args.cp_std_factor, args.cp_cbs_filter)
     # caption load pre-trained weights
-    pretrained_model = torch.load(args.cp_checkpoint+('%s_best.pth' % args.exp_name))
-    caption_model.load_state_dict(pretrained_model['state_dict']) 
+    if pretrained_model:
+        pretrained_model = torch.load(args.cp_checkpoint+('%s_best.pth' % args.exp_name))
+        caption_model.load_state_dict(pretrained_model['state_dict']) 
 
     '''==== graph model ===='''
     # graph model
     graph_su_model = AGRNN(bias= True, bn= False, dropout=0.3, multi_attn=False, layer=1, diff_edge=False, use_cbs = args.gsu_cbs)
     if args.gsu_cbs: graph_su_model.grnn1.gnn.apply_h_h_edge.get_new_kernels(0)
     # graph load pre-trained weights
-    pretrained_model = torch.load(args.gsu_checkpoint)
-    graph_su_model.load_state_dict(pretrained_model['state_dict'])
+    if pretrained_model:
+        pretrained_model = torch.load(args.gsu_checkpoint)
+        graph_su_model.load_state_dict(pretrained_model['state_dict'])
     #graph_su_model.eval()
 
     '''==== Feature extractor ===='''
@@ -366,7 +368,8 @@ def build_model(args, text_field, device):
         if args.fe_use_SC: feature_network.encoder = nn.DataParallel(feature_network.encoder) #feature_network = feature_network.cuda()
         else: feature_network = nn.DataParallel(feature_network, device_ids=device_ids)
     # feature extraction pre-trained weights
-    feature_network.load_state_dict(torch.load(args.fe_modelpath))
+    if pretrained_model:
+        feature_network.load_state_dict(torch.load(args.fe_modelpath))
     # extract the encoder layer
     if args.fe_use_SC: feature_network = feature_network.encoder
     else:
@@ -459,8 +462,6 @@ def train(epoch, lrc, model, dataloader, dict_dataloader_val, text_field):
     '''
     Finding optimal temperature scale for graph scene understanding task
     '''
-    
-    
 
     #if args.optim == 'sgd': 
     optimizer = optim.SGD(model.feature_extractor.parameters(), lr= lrc, momentum=0.9, weight_decay=0)
@@ -514,11 +515,11 @@ def train(epoch, lrc, model, dataloader, dict_dataloader_val, text_field):
             c_loss = c_criterion(caption_output[:, :-1].contiguous(), caps_gt[:, 1:].contiguous())
             
             #uda:
-            loss = (0.5 * g_loss) + (0.5 * c_loss)
+            #loss = (0.5 * g_loss) + (0.5 * c_loss)
             #uda_graph:
             #loss = g_loss
             #uda_caption:
-            #loss = c_loss
+            loss = c_loss
             loss.backward()
             optimizer.step()
             
@@ -549,7 +550,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Incremental domain adaptation for surgical report generation')
     parser.add_argument('--batch_size',            type=int,       default=8)
     parser.add_argument('--workers',               type=int,       default=0)
-    parser.add_argument('--epoch',                 type=int,       default=100)
+    parser.add_argument('--epoch',                 type=int,       default=20)
     # caption
     parser.add_argument('--exp_name',              type=str,       default='m2_transformer')
     parser.add_argument('--m',                     type=int,       default=40)   
@@ -576,20 +577,20 @@ if __name__ == "__main__":
     parser.add_argument('--fe_use_SC',             type=bool,      default=True,        help='use SuperCon')
     # SD file dirs
     parser.add_argument('--cp_features_path',      type=str,       default='datasets/instruments18/') 
-    parser.add_argument('--cp_annotation_folder',  type=str,       default='datasets/annotations_new/annotations_SD_inc')
+    parser.add_argument('--cp_annotation_folder',  type=str,       default='datasets/caption_annotations_SC_CBS/annotations_SD_base')
     parser.add_argument('--gsu_img_dir',           type=str,       default='left_frames')
     parser.add_argument('--gsu_file_dir',          type=str,       default='datasets/instruments18/')
     # TD file dirs
     # parser.add_argument('--cp_features_path',      type=str,       default='datasets/SGH_dataset_2020/') 
-    # parser.add_argument('--cp_annotation_folder',  type=str,       default='datasets/annotations_new/annotations_sgh_inc')
+    # parser.add_argument('--cp_annotation_folder',  type=str,       default='datasets/caption_annotations_SC_CBS/annotations_TD_base')
     # parser.add_argument('--gsu_img_dir',           type=str,       default='resized_frames')
     # parser.add_argument('--gsu_file_dir',          type=str,       default='datasets/SGH_dataset_2020/')
     # checkpoints dir
     # non-common extractor, MTL, UDA, trained only on SD
-    parser.add_argument('--cp_checkpoint',         type=str,       default='checkpoints/IDA_MICCAI2021_checkpoints/SD_base_LOG/')
+    parser.add_argument('--cp_checkpoint',         type=str,       default='checkpoints/c_checkpoints/SD_base_LOG/')
     parser.add_argument('--gsu_checkpoint',        type=str,       default='checkpoints/g_checkpoints/da_ecbs_resnet18_09_SC_eCBS/da_ecbs_resnet18_09_SC_eCBS/epoch_train/checkpoint_D1230_epoch.pth')
     parser.add_argument('--fe_modelpath',          type=str,       default='feature_extractor/checkpoint/incremental/inc_ResNet18_SC_CBS_0_012345678.pkl')
-    parser.add_argument('--mtl_version',           type=str,       default='UDA_balanced_loss')
+    parser.add_argument('--mtl_version',           type=str,       default='UDA_P_caption_loss')
     args = parser.parse_args()
     print(args)
 
