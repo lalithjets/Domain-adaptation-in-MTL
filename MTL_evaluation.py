@@ -178,7 +178,7 @@ def eval_mtl(model, dataloader, text_field):
     scene_graph_logits_all = torch.cat(scene_graph_logits_list).cuda()
     scene_graph_labels_all = torch.cat(scene_graph_labels_list).cuda()
     scene_graph_logits_all = F.softmax(scene_graph_logits_all, dim=1)
-    scene_graph_map_value, scene_graph_ece, _, _, _, _ = calibration_metrics(scene_graph_logits_all, scene_graph_labels_all, 'test')
+    scene_graph_map_value, scene_graph_recall = calibration_metrics(scene_graph_logits_all, scene_graph_labels_all)
     
     scene_graph_total_loss = scene_graph_total_loss / len(dataloader)
     scene_graph_total_acc = scene_graph_total_acc / scene_graph_edge_count
@@ -188,7 +188,7 @@ def eval_mtl(model, dataloader, text_field):
     gen = evaluation.PTBTokenizer.tokenize(gen)
     scores, _ = evaluation.compute_scores(gts, gen)
 
-    print('Graph : {acc: %0.4f map: %0.4f ece:%0.4f loss: %0.6f}' %(scene_graph_total_acc, scene_graph_map_value, scene_graph_ece, scene_graph_total_loss))
+    print('Graph : {acc: %0.4f map: %0.4f RECALL:%0.4f loss: %0.6f}' %(scene_graph_total_acc, scene_graph_map_value, scene_graph_recall, scene_graph_total_loss))
     print(print("Caption Scores :", scores))
     
     return
@@ -232,45 +232,52 @@ if __name__ == "__main__":
     parser.add_argument('--gsu_feat',              type=str,       default='resnet18_09_SC_CBS')
     parser.add_argument('--gsu_w2v_loc',           type=str,       default='datasets/surgicalscene_word2vec.hdf5')
     
-    ''' Unsupervised domain adaptation '''
-    # Source domain file dirs
-    parser.add_argument('--cp_features_path',      type=str,       default='datasets/instruments18/') 
-    parser.add_argument('--cp_annotation_folder',  type=str,       default='datasets/caption_annotations_SC_CBS/annotations_SD_base')
-    parser.add_argument('--gsu_img_dir',           type=str,       default='left_frames')
-    parser.add_argument('--gsu_file_dir',          type=str,       default='datasets/instruments18/')
-    # Target domain file dirs
-    #parser.add_argument('--cp_features_path',      type=str,       default='datasets/SGH_dataset_2020/') 
-    #parser.add_argument('--cp_annotation_folder',  type=str,       default='datasets/caption_annotations_SC_CBS/annotations_TD_base')
-    #parser.add_argument('--gsu_img_dir',           type=str,       default='resized_frames')
-    #parser.add_argument('--gsu_file_dir',          type=str,       default='datasets/SGH_dataset_2020/')
-    # UDA pre-trained checkpoint weights
-    parser.add_argument('--cp_checkpoint',         type=str,       default='checkpoints/c_checkpoints/SD_base_LOG/')
-    parser.add_argument('--gsu_checkpoint',        type=str,       default='checkpoints/g_checkpoints/da_ecbs_resnet18_09_SC_eCBS/da_ecbs_resnet18_09_SC_eCBS/epoch_train/checkpoint_D1230_epoch.pth')
-    parser.add_argument('--fe_modelpath',          type=str,       default='feature_extractor/checkpoint/incremental/inc_ResNet18_SC_CBS_0_012345678.pkl')
+    # for combined finetune:
+    # STL
+    # 1. STL             : (a) UDA: {(i) SD, (ii) TD}, (b) FEW: {(i) SD, (ii) TD}
+    # Balanced finetune MTL
+    # 2. BL_UDA_SC_CBS   : (a) UDA: {(i) SD, (ii) TD}
+    # 3. BL_DA_TD_SC_CBS : (a) FEW: {(i) SD, (ii) TD}
+    # KD MTL
+    # 2. KL_UDA_SC_CBS   : (a) UDA: {(i) SD, (ii) TD}
+    # 3. KL_DA_TD_SC_CBS : (a) FEW: {(i) SD, (ii) TD}
+    parser.add_argument('--mtl_version',           type=str,       default='BL_DA_TD_SC_CBS',   help='STL, BL_UDA_SC_CBS, BL_DA_TD_SC_CBS, KL_UDA_SC_CBS, KL_DA_TD_SC_CBS')
+    parser.add_argument('--adapt_type',            type=str,       default='FEW',               help='UDA, FEW')
+    parser.add_argument('--domain',                type=str,       default='TD',                help='SD, TD')
 
-    ''' Incremental domain adaptation '''
-    # Source domain incremental file dirs
-    #parser.add_argument('--cp_features_path',      type=str,       default='datasets/instruments18/') 
-    #parser.add_argument('--cp_annotation_folder',  type=str,       default='datasets/caption_annotations_SC_CBS/annotations_SD_inc')
-    #parser.add_argument('--gsu_img_dir',           type=str,       default='left_frames')
-    #parser.add_argument('--gsu_file_dir',          type=str,       default='datasets/instruments18/')
-    # Target domain incremental file dirs
-    #parser.add_argument('--cp_features_path',      type=str,       default='datasets/SGH_dataset_2020/') 
-    #parser.add_argument('--cp_annotation_folder',  type=str,       default='datasets/caption_annotations_SC_CBS/annotations_TD_inc')
-    #parser.add_argument('--gsu_img_dir',           type=str,       default='resized_frames')
-    #parser.add_argument('--gsu_file_dir',          type=str,       default='datasets/SGH_dataset_2020/')
-    # Source domain incremental domain adaption pre-trained checkpoint weights    
-    #parser.add_argument('--cp_checkpoint',         type=str,       default='checkpoints/c_checkpoints/SD_inc_LOG/')
-    #parser.add_argument('--gsu_checkpoint',        type=str,       default='checkpoints/g_checkpoints/da_ecbs_resnet18_11_SC_eCBS/da_ecbs_resnet18_11_SC_eCBS/epoch_train/checkpoint_D1250_epoch.pth')
-    #parser.add_argument('--fe_modelpath',          type=str,       default='feature_extractor/checkpoint/incremental/inc_ResNet18_SC_CBS_0_012345678910.pkl')
-    # UDA pre-trained checkpoint weights
-    # Target domain incremental domain adaption pre-trained checkpoint weights    
-    #parser.add_argument('--cp_checkpoint',         type=str,       default='checkpoints/c_checkpoints/few_shot_TD_inc_LOG/')
-    #parser.add_argument('--gsu_checkpoint',        type=str,       default='checkpoints/g_checkpoints/da_ecbs_resnet18_11_SC_eCBS/da_ecbs_resnet18_11_SC_eCBS/epoch_train/checkpoint_D2210_epoch.pth')
-    #parser.add_argument('--fe_modelpath',          type=str,       default='feature_extractor/checkpoint/incremental/inc_ResNet18_SC_CBS_0_012345678910.pkl')
-
-    parser.add_argument('--mtl_version',           type=str,       default='UDA_SC_CBS')
     args = parser.parse_args()
+
+
+    if args.adapt_type == 'UDA':   # Source domain file dirs
+        if args.domain == 'SD':
+            args.cp_features_path     = 'datasets/instruments18/' 
+            args.cp_annotation_folder = 'datasets/caption_annotations_SC_CBS/annotations_SD_base'
+            args.gsu_img_dir          = 'left_frames'
+            args.gsu_file_dir         = 'datasets/instruments18/'
+        elif args.domain == 'TD':
+            args.cp_features_path     = 'datasets/SGH_dataset_2020/'
+            args.cp_annotation_folder = 'datasets/caption_annotations_SC_CBS/annotations_TD_base'
+            args.gsu_img_dir          = 'resized_frames'
+            args.gsu_file_dir         = 'datasets/SGH_dataset_2020/'
+        # checkpoint
+        args.cp_checkpoint            = 'checkpoints/c_checkpoints/SD_base_LOG/'
+        args.gsu_checkpoint           = 'checkpoints/g_checkpoints/da_ecbs_resnet18_09_SC_eCBS/da_ecbs_resnet18_09_SC_eCBS/epoch_train/checkpoint_D1230_epoch.pth'
+        args.fe_modelpath             = 'feature_extractor/checkpoint/incremental/inc_ResNet18_SC_CBS_0_012345678.pkl'
+    if args.adapt_type == 'FEW':    # ''' Incremental domain adaptation '''
+        if args.domain == 'SD':
+            args.cp_features_path     = 'datasets/instruments18/'
+            args.cp_annotation_folder = 'datasets/caption_annotations_SC_CBS/annotations_SD_inc'
+            args.gsu_img_dir          = 'left_frames'
+            args.gsu_file_dir         = 'datasets/instruments18/'
+        if args.domain == 'TD':
+            args.cp_features_path     = 'datasets/SGH_dataset_2020/'
+            args.cp_annotation_folder = 'datasets/caption_annotations_SC_CBS/annotations_TD_inc'
+            args.gsu_img_dir          = 'resized_frames'
+            args.gsu_file_dir         = 'datasets/SGH_dataset_2020/'
+        # checkpoint
+        args.cp_checkpoint ='checkpoints/c_checkpoints/few_shot_TD_inc_LOG/'
+        args.gsu_checkpoint ='checkpoints/g_checkpoints/da_ecbs_resnet18_11_SC_eCBS/da_ecbs_resnet18_11_SC_eCBS/epoch_train/checkpoint_D2210_epoch.pth'
+        args.fe_modelpath ='feature_extractor/checkpoint/incremental/inc_ResNet18_SC_CBS_0_012345678910.pkl'
     print(args)
 
     # seed models
@@ -313,11 +320,18 @@ if __name__ == "__main__":
     dict_dataloader_val = DataLoader(dict_dataset_val, batch_size=args.batch_size, shuffle = False) # for caption with word GT class number
 
     '''==================================== Build MTL-model ======================================'''
-    model = build_model(args, text_field, device, load_pretrain=False)
+    model = build_model(args, text_field, device)
 
     ''' Model evaluation '''
-    for i in range(1,20):
-        pretrained_model = torch.load('checkpoints/mtl_train/UDA_SC_CBS/checkpoint_'+str(i)+'_epoch.pth')
+    # best scene graph
+    print(args.mtl_version, ' : Best Scene Graph')
+    if args.mtl_version is not 'STL':
+        pretrained_model = torch.load('checkpoints/mtl_train/'+args.mtl_version+'/best_graph.pth')
         model.load_state_dict(pretrained_model['state_dict'])
-        print('epoch:',i)
-        eval_mtl(model, dict_dataloader_val, text_field)
+    eval_mtl(model, dict_dataloader_val, text_field)
+    # best caption
+    print(args.mtl_version, ' : Best Caption')
+    if args.mtl_version is not 'STL':
+        pretrained_model = torch.load('checkpoints/mtl_train/'+args.mtl_version+'/best_caption.pth')
+        model.load_state_dict(pretrained_model['state_dict'])
+    eval_mtl(model, dict_dataloader_val, text_field)

@@ -178,7 +178,7 @@ def eval_mtl(model, dataloader, text_field):
     scene_graph_logits_all = torch.cat(scene_graph_logits_list).cuda()
     scene_graph_labels_all = torch.cat(scene_graph_labels_list).cuda()
     scene_graph_logits_all = F.softmax(scene_graph_logits_all, dim=1)
-    scene_graph_map_value, scene_graph_ece, _, _, _, _ = calibration_metrics(scene_graph_logits_all, scene_graph_labels_all, 'test')
+    scene_graph_map_value, scene_graph_recall = calibration_metrics(scene_graph_logits_all, scene_graph_labels_all)
     
     scene_graph_total_acc = scene_graph_total_acc / scene_graph_edge_count
     scene_graph_total_loss = scene_graph_total_loss / len(dataloader)
@@ -188,7 +188,7 @@ def eval_mtl(model, dataloader, text_field):
     gen = evaluation.PTBTokenizer.tokenize(gen)
     scores, _ = evaluation.compute_scores(gts, gen)
 
-    print('Graph : {acc: %0.4f map: %0.4f ece:%0.4f loss: %0.6f}' %(scene_graph_total_acc, scene_graph_map_value, scene_graph_ece, scene_graph_total_loss))
+    print('Graph : {acc: %0.4f map: %0.4f RECALL:%0.4f loss: %0.6f}' %(scene_graph_total_acc, scene_graph_map_value, scene_graph_recall, scene_graph_total_loss))
     print(print("Caption Scores :", scores))
     
     return
