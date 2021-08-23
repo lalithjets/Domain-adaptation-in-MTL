@@ -1,0 +1,784 @@
+###################################################################################################
+mtl_kd_train : UDA: R18_09 CBS (4,0.985): Learning_rate:  7.5e-06
+UDA_SC_CBS_KL
+
+###################################################################################################
+train: 1560
+val: 447
+=========== Train ===============
+[MTL-Train] Epoch: 1/100 MTL_Loss: 0.679293 Graph_Acc: 0.245237
+=========== Evaluation ===============
+Graph : {acc: 0.3781 map: 0.0947 ece:0.5113 loss: 3.228439}
+Caption Scores : {'BLEU': array([0.5159, 0.4416, 0.3724, 0.3081]), 'METEOR': 0.293, 'ROUGE': 0.4732, 'CIDEr': 1.5514}
+=========== Train ===============
+[MTL-Train] Epoch: 2/100 MTL_Loss: 0.053226 Graph_Acc: 0.306144
+=========== Evaluation ===============
+Graph : {acc: 0.4126 map: 0.1169 ece:0.5267 loss: 2.915491}
+Caption Scores : {'BLEU': array([0.4992, 0.4368, 0.3776, 0.3126]), 'METEOR': 0.2908, 'ROUGE': 0.4563, 'CIDEr': 1.7693}
+=========== Train ===============
+[MTL-Train] Epoch: 3/100 MTL_Loss: -0.115086 Graph_Acc: 0.319023
+=========== Evaluation ===============
+Graph : {acc: 0.4083 map: 0.1172 ece:0.3716 loss: 2.661151}
+Caption Scores : {'BLEU': array([0.5003, 0.4334, 0.3675, 0.2998]), 'METEOR': 0.295, 'ROUGE': 0.4635, 'CIDEr': 1.664}
+=========== Train ===============
+[MTL-Train] Epoch: 4/100 MTL_Loss: -0.235630 Graph_Acc: 0.315804
+=========== Evaluation ===============
+Graph : {acc: 0.4109 map: 0.1234 ece:0.3973 loss: 2.561687}
+Caption Scores : {'BLEU': array([0.4862, 0.4137, 0.3508, 0.2924]), 'METEOR': 0.2792, 'ROUGE': 0.4699, 'CIDEr': 1.8355}
+=========== Train ===============
+[MTL-Train] Epoch: 5/100 MTL_Loss: -0.349885 Graph_Acc: 0.327878
+=========== Evaluation ===============
+Graph : {acc: 0.4350 map: 0.1340 ece:0.3119 loss: 2.346066}
+Caption Scores : {'BLEU': array([0.5207, 0.4441, 0.3782, 0.3181]), 'METEOR': 0.2905, 'ROUGE': 0.5099, 'CIDEr': 1.9654}
+=========== Train ===============
+[MTL-Train] Epoch: 6/100 MTL_Loss: -0.459000 Graph_Acc: 0.331366
+=========== Evaluation ===============
+Graph : {acc: 0.4376 map: 0.1410 ece:0.2667 loss: 2.198946}
+Caption Scores : {'BLEU': array([0.5474, 0.4716, 0.4073, 0.352 ]), 'METEOR': 0.3135, 'ROUGE': 0.5259, 'CIDEr': 2.0475}
+=========== Train ===============
+[MTL-Train] Epoch: 7/100 MTL_Loss: -0.573727 Graph_Acc: 0.358465
+=========== Evaluation ===============
+Graph : {acc: 0.4384 map: 0.1468 ece:0.2843 loss: 2.137164}
+Caption Scores : {'BLEU': array([0.6031, 0.5326, 0.4769, 0.4264]), 'METEOR': 0.3326, 'ROUGE': 0.5927, 'CIDEr': 2.4516}
+=========== Train ===============
+[MTL-Train] Epoch: 8/100 MTL_Loss: -0.684536 Graph_Acc: 0.370003
+=========== Evaluation ===============
+Graph : {acc: 0.4806 map: 0.1622 ece:0.1918 loss: 2.023424}
+Caption Scores : {'BLEU': array([0.57  , 0.4955, 0.432 , 0.3775]), 'METEOR': 0.3293, 'ROUGE': 0.5525, 'CIDEr': 2.2856}
+=========== Train ===============
+[MTL-Train] Epoch: 9/100 MTL_Loss: -0.802643 Graph_Acc: 0.380467
+=========== Evaluation ===============
+Graph : {acc: 0.4289 map: 0.1726 ece:0.2680 loss: 1.983423}
+Caption Scores : {'BLEU': array([0.565 , 0.4899, 0.4262, 0.3712]), 'METEOR': 0.317, 'ROUGE': 0.5397, 'CIDEr': 2.1228}
+=========== Train ===============
+[MTL-Train] Epoch: 10/100 MTL_Loss: -0.905898 Graph_Acc: 0.387175
+=========== Evaluation ===============
+Graph : {acc: 0.5409 map: 0.1643 ece:0.1287 loss: 1.915734}
+Caption Scores : {'BLEU': array([0.5736, 0.5068, 0.4467, 0.3923]), 'METEOR': 0.3658, 'ROUGE': 0.6004, 'CIDEr': 2.217}
+=========== Train ===============
+[MTL-Train] Epoch: 11/100 MTL_Loss: -1.029917 Graph_Acc: 0.391468
+=========== Evaluation ===============
+Graph : {acc: 0.5056 map: 0.1935 ece:0.1157 loss: 1.848690}
+Caption Scores : {'BLEU': array([0.5476, 0.4786, 0.4204, 0.3686]), 'METEOR': 0.3076, 'ROUGE': 0.5424, 'CIDEr': 2.2331}
+=========== Train ===============
+[MTL-Train] Epoch: 12/100 MTL_Loss: -1.144447 Graph_Acc: 0.396834
+=========== Evaluation ===============
+Graph : {acc: 0.5228 map: 0.1989 ece:0.1393 loss: 1.875069}
+Caption Scores : {'BLEU': array([0.5361, 0.4705, 0.4171, 0.3681]), 'METEOR': 0.2969, 'ROUGE': 0.5566, 'CIDEr': 2.2116}
+=========== Train ===============
+[MTL-Train] Epoch: 13/100 MTL_Loss: -1.274190 Graph_Acc: 0.399785
+=========== Evaluation ===============
+Graph : {acc: 0.5237 map: 0.1850 ece:0.1711 loss: 1.839628}
+Caption Scores : {'BLEU': array([0.5702, 0.5   , 0.4393, 0.3855]), 'METEOR': 0.3319, 'ROUGE': 0.5624, 'CIDEr': 1.981}
+=========== Train ===============
+[MTL-Train] Epoch: 14/100 MTL_Loss: -1.405776 Graph_Acc: 0.411591
+=========== Evaluation ===============
+Graph : {acc: 0.5978 map: 0.1959 ece:0.1001 loss: 1.829806}
+Caption Scores : {'BLEU': array([0.5684, 0.4931, 0.4275, 0.3695]), 'METEOR': 0.3246, 'ROUGE': 0.5516, 'CIDEr': 2.0593}
+=========== Train ===============
+[MTL-Train] Epoch: 15/100 MTL_Loss: -1.530858 Graph_Acc: 0.408371
+=========== Evaluation ===============
+Graph : {acc: 0.5306 map: 0.1964 ece:0.0684 loss: 1.843630}
+Caption Scores : {'BLEU': array([0.5523, 0.486 , 0.4237, 0.3678]), 'METEOR': 0.3471, 'ROUGE': 0.5548, 'CIDEr': 2.0705}
+=========== Train ===============
+[MTL-Train] Epoch: 16/100 MTL_Loss: -1.668229 Graph_Acc: 0.425543
+=========== Evaluation ===============
+Graph : {acc: 0.5685 map: 0.2119 ece:0.0655 loss: 1.775076}
+Caption Scores : {'BLEU': array([0.5576, 0.4879, 0.4259, 0.3696]), 'METEOR': 0.3074, 'ROUGE': 0.547, 'CIDEr': 2.0484}
+=========== Train ===============
+[MTL-Train] Epoch: 17/100 MTL_Loss: -1.810467 Graph_Acc: 0.422324
+=========== Evaluation ===============
+Graph : {acc: 0.5521 map: 0.1997 ece:0.0985 loss: 1.819674}
+Caption Scores : {'BLEU': array([0.5417, 0.4758, 0.4179, 0.3673]), 'METEOR': 0.3402, 'ROUGE': 0.5541, 'CIDEr': 2.0634}
+=========== Train ===============
+[MTL-Train] Epoch: 18/100 MTL_Loss: -1.955257 Graph_Acc: 0.438422
+=========== Evaluation ===============
+Graph : {acc: 0.6288 map: 0.2119 ece:0.0848 loss: 1.770697}
+Caption Scores : {'BLEU': array([0.5429, 0.4648, 0.4078, 0.3627]), 'METEOR': 0.2903, 'ROUGE': 0.5275, 'CIDEr': 1.987}
+=========== Train ===============
+[MTL-Train] Epoch: 19/100 MTL_Loss: -2.097882 Graph_Acc: 0.441910
+=========== Evaluation ===============
+Graph : {acc: 0.6262 map: 0.2239 ece:0.0651 loss: 1.767161}
+Caption Scores : {'BLEU': array([0.5567, 0.4802, 0.4171, 0.3636]), 'METEOR': 0.3014, 'ROUGE': 0.5247, 'CIDEr': 1.8374}
+=========== Train ===============
+[MTL-Train] Epoch: 20/100 MTL_Loss: -2.235980 Graph_Acc: 0.434398
+=========== Evaluation ===============
+Graph : {acc: 0.5797 map: 0.2062 ece:0.1393 loss: 1.779666}
+Caption Scores : {'BLEU': array([0.5813, 0.5047, 0.4444, 0.392 ]), 'METEOR': 0.3173, 'ROUGE': 0.5589, 'CIDEr': 1.9736}
+=========== Train ===============
+[MTL-Train] Epoch: 21/100 MTL_Loss: -2.399630 Graph_Acc: 0.445130
+=========== Evaluation ===============
+Graph : {acc: 0.5917 map: 0.2228 ece:0.0602 loss: 1.767166}
+Caption Scores : {'BLEU': array([0.5593, 0.4902, 0.4325, 0.382 ]), 'METEOR': 0.3284, 'ROUGE': 0.5541, 'CIDEr': 2.0095}
+=========== Train ===============
+[MTL-Train] Epoch: 22/100 MTL_Loss: -2.561731 Graph_Acc: 0.452643
+=========== Evaluation ===============
+Graph : {acc: 0.5969 map: 0.2286 ece:0.0573 loss: 1.731225}
+Caption Scores : {'BLEU': array([0.5733, 0.5034, 0.4429, 0.3907]), 'METEOR': 0.3131, 'ROUGE': 0.5524, 'CIDEr': 2.1235}
+=========== Train ===============
+[MTL-Train] Epoch: 23/100 MTL_Loss: -2.711164 Graph_Acc: 0.471693
+=========== Evaluation ===============
+Graph : {acc: 0.5995 map: 0.2822 ece:0.1485 loss: 1.779315}
+Caption Scores : {'BLEU': array([0.5287, 0.4531, 0.3915, 0.3405]), 'METEOR': 0.2854, 'ROUGE': 0.5089, 'CIDEr': 1.8326}
+=========== Train ===============
+[MTL-Train] Epoch: 24/100 MTL_Loss: -2.848873 Graph_Acc: 0.462302
+=========== Evaluation ===============
+Graph : {acc: 0.5909 map: 0.2436 ece:0.1043 loss: 1.759071}
+Caption Scores : {'BLEU': array([0.5697, 0.4979, 0.4328, 0.3748]), 'METEOR': 0.3401, 'ROUGE': 0.5694, 'CIDEr': 2.0703}
+=========== Train ===============
+[MTL-Train] Epoch: 25/100 MTL_Loss: -3.029852 Graph_Acc: 0.488597
+=========== Evaluation ===============
+Graph : {acc: 0.5917 map: 0.2342 ece:0.1347 loss: 1.831912}
+Caption Scores : {'BLEU': array([0.5371, 0.4705, 0.4064, 0.3474]), 'METEOR': 0.3257, 'ROUGE': 0.5307, 'CIDEr': 1.8881}
+=========== Train ===============
+[MTL-Train] Epoch: 26/100 MTL_Loss: -3.158091 Graph_Acc: 0.477059
+=========== Evaluation ===============
+Graph : {acc: 0.5969 map: 0.2572 ece:0.0848 loss: 1.745171}
+Caption Scores : {'BLEU': array([0.5509, 0.4764, 0.4139, 0.3602]), 'METEOR': 0.296, 'ROUGE': 0.546, 'CIDEr': 2.0504}
+=========== Train ===============
+[MTL-Train] Epoch: 27/100 MTL_Loss: -3.352281 Graph_Acc: 0.491548
+=========== Evaluation ===============
+Graph : {acc: 0.6098 map: 0.2381 ece:0.1026 loss: 1.743811}
+Caption Scores : {'BLEU': array([0.5885, 0.5179, 0.4583, 0.4057]), 'METEOR': 0.3373, 'ROUGE': 0.5885, 'CIDEr': 2.2059}
+=========== Train ===============
+[MTL-Train] Epoch: 28/100 MTL_Loss: -3.541607 Graph_Acc: 0.499866
+=========== Evaluation ===============
+Graph : {acc: 0.5917 map: 0.2373 ece:0.0997 loss: 1.745145}
+Caption Scores : {'BLEU': array([0.5558, 0.491 , 0.4288, 0.3736]), 'METEOR': 0.3179, 'ROUGE': 0.5285, 'CIDEr': 2.2323}
+=========== Train ===============
+[MTL-Train] Epoch: 29/100 MTL_Loss: -3.720140 Graph_Acc: 0.498793
+=========== Evaluation ===============
+Graph : {acc: 0.6210 map: 0.2431 ece:0.1209 loss: 1.736506}
+Caption Scores : {'BLEU': array([0.4754, 0.3913, 0.3333, 0.2898]), 'METEOR': 0.2445, 'ROUGE': 0.4832, 'CIDEr': 1.5865}
+=========== Train ===============
+[MTL-Train] Epoch: 30/100 MTL_Loss: -3.856817 Graph_Acc: 0.504159
+=========== Evaluation ===============
+Graph : {acc: 0.5805 map: 0.2438 ece:0.1315 loss: 1.701042}
+Caption Scores : {'BLEU': array([0.5743, 0.5014, 0.4327, 0.3719]), 'METEOR': 0.3284, 'ROUGE': 0.5619, 'CIDEr': 2.3857}
+=========== Train ===============
+[MTL-Train] Epoch: 31/100 MTL_Loss: -4.055055 Graph_Acc: 0.516501
+=========== Evaluation ===============
+Graph : {acc: 0.5986 map: 0.2390 ece:0.1116 loss: 1.736237}
+Caption Scores : {'BLEU': array([0.5822, 0.5098, 0.4445, 0.3842]), 'METEOR': 0.3383, 'ROUGE': 0.5793, 'CIDEr': 2.0977}
+=========== Train ===============
+[MTL-Train] Epoch: 32/100 MTL_Loss: -4.226602 Graph_Acc: 0.528575
+=========== Evaluation ===============
+Graph : {acc: 0.5926 map: 0.2396 ece:0.1303 loss: 1.742799}
+Caption Scores : {'BLEU': array([0.5601, 0.4922, 0.4278, 0.3723]), 'METEOR': 0.3387, 'ROUGE': 0.5507, 'CIDEr': 2.1823}
+=========== Train ===============
+[MTL-Train] Epoch: 33/100 MTL_Loss: -4.410994 Graph_Acc: 0.522672
+=========== Evaluation ===============
+Graph : {acc: 0.6021 map: 0.2353 ece:0.1195 loss: 1.782078}
+Caption Scores : {'BLEU': array([0.5351, 0.4648, 0.401 , 0.3483]), 'METEOR': 0.298, 'ROUGE': 0.5178, 'CIDEr': 2.0553}
+=========== Train ===============
+[MTL-Train] Epoch: 34/100 MTL_Loss: -4.566259 Graph_Acc: 0.532332
+=========== Evaluation ===============
+Graph : {acc: 0.6176 map: 0.2419 ece:0.1148 loss: 1.682308}
+Caption Scores : {'BLEU': array([0.5637, 0.4989, 0.4431, 0.3938]), 'METEOR': 0.3299, 'ROUGE': 0.5508, 'CIDEr': 2.0943}
+=========== Train ===============
+[MTL-Train] Epoch: 35/100 MTL_Loss: -4.791047 Graph_Acc: 0.524014
+=========== Evaluation ===============
+Graph : {acc: 0.5909 map: 0.2389 ece:0.1604 loss: 1.769741}
+Caption Scores : {'BLEU': array([0.5854, 0.5099, 0.4461, 0.3924]), 'METEOR': 0.3318, 'ROUGE': 0.568, 'CIDEr': 2.4682}
+=========== Train ===============
+[MTL-Train] Epoch: 36/100 MTL_Loss: -4.953712 Graph_Acc: 0.549504
+=========== Evaluation ===============
+Graph : {acc: 0.6021 map: 0.2324 ece:0.1562 loss: 1.773543}
+Caption Scores : {'BLEU': array([0.5746, 0.5034, 0.4377, 0.3819]), 'METEOR': 0.3387, 'ROUGE': 0.5662, 'CIDEr': 2.25}
+=========== Train ===============
+[MTL-Train] Epoch: 37/100 MTL_Loss: -5.166530 Graph_Acc: 0.554065
+=========== Evaluation ===============
+Graph : {acc: 0.6236 map: 0.2239 ece:0.1462 loss: 1.832387}
+Caption Scores : {'BLEU': array([0.5797, 0.5086, 0.4472, 0.3954]), 'METEOR': 0.3388, 'ROUGE': 0.5827, 'CIDEr': 2.0473}
+=========== Train ===============
+[MTL-Train] Epoch: 38/100 MTL_Loss: -5.365382 Graph_Acc: 0.555943
+=========== Evaluation ===============
+Graph : {acc: 0.6038 map: 0.2361 ece:0.1840 loss: 1.850884}
+Caption Scores : {'BLEU': array([0.6019, 0.5219, 0.4507, 0.3863]), 'METEOR': 0.331, 'ROUGE': 0.5879, 'CIDEr': 2.0508}
+=========== Train ===============
+[MTL-Train] Epoch: 39/100 MTL_Loss: -5.593321 Graph_Acc: 0.561578
+=========== Evaluation ===============
+Graph : {acc: 0.5969 map: 0.2365 ece:0.1899 loss: 1.909471}
+Caption Scores : {'BLEU': array([0.5441, 0.4677, 0.395 , 0.3304]), 'METEOR': 0.3065, 'ROUGE': 0.5188, 'CIDEr': 2.0415}
+=========== Train ===============
+[MTL-Train] Epoch: 40/100 MTL_Loss: -5.793692 Graph_Acc: 0.577676
+=========== Evaluation ===============
+Graph : {acc: 0.5952 map: 0.2304 ece:0.2074 loss: 1.957292}
+Caption Scores : {'BLEU': array([0.55  , 0.4839, 0.4232, 0.3726]), 'METEOR': 0.3543, 'ROUGE': 0.5704, 'CIDEr': 1.9078}
+=========== Train ===============
+[MTL-Train] Epoch: 41/100 MTL_Loss: -5.933905 Graph_Acc: 0.596190
+=========== Evaluation ===============
+Graph : {acc: 0.6012 map: 0.2311 ece:0.1971 loss: 1.947946}
+Caption Scores : {'BLEU': array([0.5765, 0.5072, 0.4392, 0.3833]), 'METEOR': 0.3341, 'ROUGE': 0.5669, 'CIDEr': 2.6308}
+=========== Train ===============
+[MTL-Train] Epoch: 42/100 MTL_Loss: -6.164348 Graph_Acc: 0.595653
+=========== Evaluation ===============
+Graph : {acc: 0.6253 map: 0.2416 ece:0.1957 loss: 1.870856}
+Caption Scores : {'BLEU': array([0.5291, 0.4578, 0.4016, 0.3538]), 'METEOR': 0.2887, 'ROUGE': 0.5281, 'CIDEr': 1.9077}
+=========== Train ===============
+[MTL-Train] Epoch: 43/100 MTL_Loss: -6.341211 Graph_Acc: 0.603703
+=========== Evaluation ===============
+Graph : {acc: 0.5969 map: 0.2339 ece:0.2277 loss: 2.018206}
+Caption Scores : {'BLEU': array([0.6006, 0.5228, 0.456 , 0.398 ]), 'METEOR': 0.3262, 'ROUGE': 0.5766, 'CIDEr': 1.9892}
+=========== Train ===============
+[MTL-Train] Epoch: 44/100 MTL_Loss: -6.536611 Graph_Acc: 0.598336
+=========== Evaluation ===============
+Graph : {acc: 0.6184 map: 0.2419 ece:0.2030 loss: 1.993384}
+Caption Scores : {'BLEU': array([0.5633, 0.4926, 0.4265, 0.3695]), 'METEOR': 0.3145, 'ROUGE': 0.5536, 'CIDEr': 2.1243}
+=========== Train ===============
+[MTL-Train] Epoch: 45/100 MTL_Loss: -6.754768 Graph_Acc: 0.612825
+=========== Evaluation ===============
+Graph : {acc: 0.5349 map: 0.2085 ece:0.3114 loss: 2.550452}
+Caption Scores : {'BLEU': array([0.5436, 0.4756, 0.4098, 0.3483]), 'METEOR': 0.3113, 'ROUGE': 0.5385, 'CIDEr': 2.061}
+=========== Train ===============
+[MTL-Train] Epoch: 46/100 MTL_Loss: -6.950955 Graph_Acc: 0.611215
+=========== Evaluation ===============
+Graph : {acc: 0.5805 map: 0.2389 ece:0.2593 loss: 2.101699}
+Caption Scores : {'BLEU': array([0.5821, 0.5138, 0.451 , 0.3955]), 'METEOR': 0.3377, 'ROUGE': 0.581, 'CIDEr': 2.1116}
+=========== Train ===============
+[MTL-Train] Epoch: 47/100 MTL_Loss: -7.220555 Graph_Acc: 0.618460
+=========== Evaluation ===============
+Graph : {acc: 0.6003 map: 0.2241 ece:0.2562 loss: 2.353312}
+Caption Scores : {'BLEU': array([0.5558, 0.4955, 0.4373, 0.3881]), 'METEOR': 0.3684, 'ROUGE': 0.5849, 'CIDEr': 2.2088}
+=========== Train ===============
+[MTL-Train] Epoch: 48/100 MTL_Loss: -7.413108 Graph_Acc: 0.632144
+=========== Evaluation ===============
+Graph : {acc: 0.6090 map: 0.2273 ece:0.2677 loss: 2.484064}
+Caption Scores : {'BLEU': array([0.5389, 0.4652, 0.3996, 0.3465]), 'METEOR': 0.2961, 'ROUGE': 0.5252, 'CIDEr': 2.1424}
+=========== Train ===============
+[MTL-Train] Epoch: 49/100 MTL_Loss: -7.622559 Graph_Acc: 0.640461
+=========== Evaluation ===============
+Graph : {acc: 0.5616 map: 0.1911 ece:0.3272 loss: 3.428962}
+Caption Scores : {'BLEU': array([0.5688, 0.4966, 0.4293, 0.3721]), 'METEOR': 0.3206, 'ROUGE': 0.5544, 'CIDEr': 2.106}
+=========== Train ===============
+[MTL-Train] Epoch: 50/100 MTL_Loss: -7.801925 Graph_Acc: 0.653340
+=========== Evaluation ===============
+Graph : {acc: 0.5960 map: 0.2252 ece:0.2811 loss: 2.668104}
+Caption Scores : {'BLEU': array([0.5343, 0.4662, 0.4098, 0.3622]), 'METEOR': 0.2935, 'ROUGE': 0.5663, 'CIDEr': 2.215}
+
+
+
+###################################################################################################
+mtl_kd_train : UDA: R18_11 CBS (4,0.985): Learning_rate:  7.5e-06
+DA_SD_SC_CBS_KL
+
+###################################################################################################
+Graph : {acc: 0.0379 map: 0.0783 ece:0.7005 loss: 19.922777}
+Caption Scores : {'BLEU': array([0.0146, 0.    , 0.    , 0.    ]), 'METEOR': 0.0041, 'ROUGE': 0.0189, 'CIDEr': 0.0059}
+Learning_rate:  7.5e-06
+=========== Train ===============
+[MTL-Train] Epoch: 1/100 MTL_Loss: 0.694927 Graph_Acc: 0.243896
+=========== Evaluation ===============
+Graph : {acc: 0.3738 map: 0.0944 ece:0.5021 loss: 3.248667}
+Caption Scores : {'BLEU': array([0.487 , 0.4126, 0.3387, 0.2679]), 'METEOR': 0.2833, 'ROUGE': 0.46, 'CIDEr': 1.5001}
+=========== Train ===============
+[MTL-Train] Epoch: 2/100 MTL_Loss: 0.072685 Graph_Acc: 0.304266
+=========== Evaluation ===============
+Graph : {acc: 0.4126 map: 0.1142 ece:0.5231 loss: 2.915977}
+Caption Scores : {'BLEU': array([0.4779, 0.4142, 0.3503, 0.2788]), 'METEOR': 0.2823, 'ROUGE': 0.4394, 'CIDEr': 1.634}
+=========== Train ===============
+[MTL-Train] Epoch: 3/100 MTL_Loss: -0.094202 Graph_Acc: 0.317682
+=========== Evaluation ===============
+Graph : {acc: 0.3997 map: 0.1166 ece:0.3514 loss: 2.663799}
+Caption Scores : {'BLEU': array([0.4984, 0.4318, 0.3644, 0.2972]), 'METEOR': 0.3007, 'ROUGE': 0.4644, 'CIDEr': 1.7264}
+=========== Train ===============
+[MTL-Train] Epoch: 4/100 MTL_Loss: -0.213124 Graph_Acc: 0.314462
+=========== Evaluation ===============
+Graph : {acc: 0.4109 map: 0.1224 ece:0.3869 loss: 2.576638}
+Caption Scores : {'BLEU': array([0.5077, 0.4397, 0.3742, 0.3074]), 'METEOR': 0.2982, 'ROUGE': 0.4811, 'CIDEr': 1.9631}
+=========== Train ===============
+[MTL-Train] Epoch: 5/100 MTL_Loss: -0.323482 Graph_Acc: 0.323316
+=========== Evaluation ===============
+Graph : {acc: 0.4419 map: 0.1333 ece:0.2929 loss: 2.342994}
+Caption Scores : {'BLEU': array([0.5211, 0.4405, 0.3718, 0.3078]), 'METEOR': 0.2892, 'ROUGE': 0.5047, 'CIDEr': 1.8954}
+=========== Train ===============
+[MTL-Train] Epoch: 6/100 MTL_Loss: -0.429030 Graph_Acc: 0.330024
+=========== Evaluation ===============
+Graph : {acc: 0.4419 map: 0.1391 ece:0.2561 loss: 2.213492}
+Caption Scores : {'BLEU': array([0.5167, 0.444 , 0.3753, 0.3153]), 'METEOR': 0.323, 'ROUGE': 0.5051, 'CIDEr': 1.8597}
+=========== Train ===============
+[MTL-Train] Epoch: 7/100 MTL_Loss: -0.539063 Graph_Acc: 0.354709
+=========== Evaluation ===============
+Graph : {acc: 0.4419 map: 0.1426 ece:0.2663 loss: 2.152056}
+Caption Scores : {'BLEU': array([0.5128, 0.4412, 0.384 , 0.3315]), 'METEOR': 0.2874, 'ROUGE': 0.5277, 'CIDEr': 2.2056}
+=========== Train ===============
+[MTL-Train] Epoch: 8/100 MTL_Loss: -0.644020 Graph_Acc: 0.368661
+=========== Evaluation ===============
+Graph : {acc: 0.4927 map: 0.1612 ece:0.1690 loss: 2.023780}
+Caption Scores : {'BLEU': array([0.5358, 0.4659, 0.3999, 0.339 ]), 'METEOR': 0.327, 'ROUGE': 0.5264, 'CIDEr': 2.0972}
+=========== Train ===============
+[MTL-Train] Epoch: 9/100 MTL_Loss: -0.757930 Graph_Acc: 0.378052
+=========== Evaluation ===============
+Graph : {acc: 0.4703 map: 0.1686 ece:0.2066 loss: 1.980486}
+Caption Scores : {'BLEU': array([0.5065, 0.4398, 0.3826, 0.3282]), 'METEOR': 0.2905, 'ROUGE': 0.5027, 'CIDEr': 2.143}
+=========== Train ===============
+[MTL-Train] Epoch: 10/100 MTL_Loss: -0.856368 Graph_Acc: 0.384223
+=========== Evaluation ===============
+Graph : {acc: 0.5564 map: 0.1604 ece:0.1331 loss: 1.928662}
+Caption Scores : {'BLEU': array([0.5453, 0.4743, 0.4093, 0.3494]), 'METEOR': 0.3389, 'ROUGE': 0.5476, 'CIDEr': 2.0625}
+=========== Train ===============
+[MTL-Train] Epoch: 11/100 MTL_Loss: -0.975692 Graph_Acc: 0.386906
+=========== Evaluation ===============
+Graph : {acc: 0.5314 map: 0.1873 ece:0.0966 loss: 1.855720}
+Caption Scores : {'BLEU': array([0.5906, 0.5199, 0.4589, 0.4066]), 'METEOR': 0.3346, 'ROUGE': 0.5612, 'CIDEr': 2.4114}
+=========== Train ===============
+[MTL-Train] Epoch: 12/100 MTL_Loss: -1.082717 Graph_Acc: 0.392273
+=========== Evaluation ===============
+Graph : {acc: 0.5271 map: 0.1989 ece:0.1490 loss: 1.892390}
+Caption Scores : {'BLEU': array([0.4164, 0.3458, 0.2965, 0.257 ]), 'METEOR': 0.2345, 'ROUGE': 0.4933, 'CIDEr': 2.0157}
+=========== Train ===============
+[MTL-Train] Epoch: 13/100 MTL_Loss: -1.207742 Graph_Acc: 0.394419
+=========== Evaluation ===============
+Graph : {acc: 0.5220 map: 0.1783 ece:0.1451 loss: 1.852388}
+Caption Scores : {'BLEU': array([0.5678, 0.4949, 0.4325, 0.3789]), 'METEOR': 0.3415, 'ROUGE': 0.5744, 'CIDEr': 2.2431}
+=========== Train ===============
+[MTL-Train] Epoch: 14/100 MTL_Loss: -1.333810 Graph_Acc: 0.408371
+=========== Evaluation ===============
+Graph : {acc: 0.6003 map: 0.1958 ece:0.0884 loss: 1.833500}
+Caption Scores : {'BLEU': array([0.4746, 0.3955, 0.3373, 0.2874]), 'METEOR': 0.2566, 'ROUGE': 0.4948, 'CIDEr': 1.8622}
+=========== Train ===============
+[MTL-Train] Epoch: 15/100 MTL_Loss: -1.449518 Graph_Acc: 0.411591
+=========== Evaluation ===============
+Graph : {acc: 0.5504 map: 0.1959 ece:0.0627 loss: 1.846757}
+Caption Scores : {'BLEU': array([0.5228, 0.4548, 0.3965, 0.3443]), 'METEOR': 0.2946, 'ROUGE': 0.5084, 'CIDEr': 1.9683}
+=========== Train ===============
+[MTL-Train] Epoch: 16/100 MTL_Loss: -1.580149 Graph_Acc: 0.422324
+=========== Evaluation ===============
+Graph : {acc: 0.5995 map: 0.2017 ece:0.0925 loss: 1.779609}
+Caption Scores : {'BLEU': array([0.4498, 0.3828, 0.3253, 0.2715]), 'METEOR': 0.2595, 'ROUGE': 0.4886, 'CIDEr': 1.9807}
+=========== Train ===============
+[MTL-Train] Epoch: 17/100 MTL_Loss: -1.714153 Graph_Acc: 0.419640
+=========== Evaluation ===============
+Graph : {acc: 0.5848 map: 0.2015 ece:0.0858 loss: 1.815318}
+Caption Scores : {'BLEU': array([0.5025, 0.4322, 0.3782, 0.3341]), 'METEOR': 0.2818, 'ROUGE': 0.4865, 'CIDEr': 1.7373}
+=========== Train ===============
+[MTL-Train] Epoch: 18/100 MTL_Loss: -1.850786 Graph_Acc: 0.440837
+=========== Evaluation ===============
+Graph : {acc: 0.6348 map: 0.2127 ece:0.0737 loss: 1.781000}
+Caption Scores : {'BLEU': array([0.591 , 0.5172, 0.456 , 0.4036]), 'METEOR': 0.3358, 'ROUGE': 0.5864, 'CIDEr': 2.4483}
+=========== Train ===============
+[MTL-Train] Epoch: 19/100 MTL_Loss: -1.985507 Graph_Acc: 0.437886
+=========== Evaluation ===============
+Graph : {acc: 0.6253 map: 0.2244 ece:0.0598 loss: 1.781615}
+Caption Scores : {'BLEU': array([0.5124, 0.444 , 0.3812, 0.3268]), 'METEOR': 0.2883, 'ROUGE': 0.4973, 'CIDEr': 1.9237}
+=========== Train ===============
+[MTL-Train] Epoch: 20/100 MTL_Loss: -2.114950 Graph_Acc: 0.431715
+=========== Evaluation ===============
+Graph : {acc: 0.6064 map: 0.2243 ece:0.0875 loss: 1.763807}
+Caption Scores : {'BLEU': array([0.5256, 0.4504, 0.3925, 0.3423]), 'METEOR': 0.2857, 'ROUGE': 0.5455, 'CIDEr': 2.0402}
+=========== Train ===============
+[MTL-Train] Epoch: 21/100 MTL_Loss: -2.267111 Graph_Acc: 0.441910
+=========== Evaluation ===============
+Graph : {acc: 0.6133 map: 0.2318 ece:0.0738 loss: 1.762686}
+Caption Scores : {'BLEU': array([0.4845, 0.4111, 0.3551, 0.3071]), 'METEOR': 0.2653, 'ROUGE': 0.5014, 'CIDEr': 1.8996}
+=========== Train ===============
+[MTL-Train] Epoch: 22/100 MTL_Loss: -2.421474 Graph_Acc: 0.444057
+=========== Evaluation ===============
+Graph : {acc: 0.6133 map: 0.2312 ece:0.0558 loss: 1.726332}
+Caption Scores : {'BLEU': array([0.5366, 0.4653, 0.4073, 0.3577]), 'METEOR': 0.2984, 'ROUGE': 0.5534, 'CIDEr': 2.445}
+=========== Train ===============
+[MTL-Train] Epoch: 23/100 MTL_Loss: -2.556153 Graph_Acc: 0.469547
+=========== Evaluation ===============
+Graph : {acc: 0.6167 map: 0.2585 ece:0.1458 loss: 1.778710}
+Caption Scores : {'BLEU': array([0.4672, 0.4054, 0.3577, 0.3149]), 'METEOR': 0.2662, 'ROUGE': 0.5228, 'CIDEr': 2.2037}
+=========== Train ===============
+[MTL-Train] Epoch: 24/100 MTL_Loss: -2.689188 Graph_Acc: 0.457204
+=========== Evaluation ===============
+Graph : {acc: 0.6176 map: 0.2286 ece:0.0968 loss: 1.758861}
+Caption Scores : {'BLEU': array([0.5468, 0.4784, 0.4175, 0.3626]), 'METEOR': 0.3102, 'ROUGE': 0.5317, 'CIDEr': 2.0935}
+=========== Train ===============
+[MTL-Train] Epoch: 25/100 MTL_Loss: -2.857348 Graph_Acc: 0.477864
+=========== Evaluation ===============
+Graph : {acc: 0.6184 map: 0.2248 ece:0.0951 loss: 1.826927}
+Caption Scores : {'BLEU': array([0.5834, 0.515 , 0.4625, 0.4213]), 'METEOR': 0.3176, 'ROUGE': 0.5768, 'CIDEr': 2.6066}
+=========== Train ===============
+[MTL-Train] Epoch: 26/100 MTL_Loss: -2.976396 Graph_Acc: 0.473571
+=========== Evaluation ===============
+Graph : {acc: 0.6047 map: 0.2395 ece:0.0638 loss: 1.753617}
+Caption Scores : {'BLEU': array([0.5095, 0.4483, 0.4022, 0.3658]), 'METEOR': 0.2888, 'ROUGE': 0.5553, 'CIDEr': 2.6555}
+=========== Train ===============
+[MTL-Train] Epoch: 27/100 MTL_Loss: -3.157479 Graph_Acc: 0.484840
+=========== Evaluation ===============
+Graph : {acc: 0.6202 map: 0.2368 ece:0.1006 loss: 1.748632}
+Caption Scores : {'BLEU': array([0.5775, 0.5099, 0.4612, 0.4221]), 'METEOR': 0.3108, 'ROUGE': 0.5873, 'CIDEr': 2.4932}
+=========== Train ===============
+[MTL-Train] Epoch: 28/100 MTL_Loss: -3.336255 Graph_Acc: 0.492890
+=========== Evaluation ===============
+Graph : {acc: 0.6322 map: 0.2360 ece:0.0633 loss: 1.734023}
+Caption Scores : {'BLEU': array([0.5152, 0.4538, 0.4021, 0.3569]), 'METEOR': 0.2951, 'ROUGE': 0.5354, 'CIDEr': 2.2747}
+=========== Train ===============
+[MTL-Train] Epoch: 29/100 MTL_Loss: -3.502679 Graph_Acc: 0.490743
+=========== Evaluation ===============
+Graph : {acc: 0.6400 map: 0.2419 ece:0.1113 loss: 1.737834}
+Caption Scores : {'BLEU': array([0.5557, 0.4834, 0.4304, 0.3882]), 'METEOR': 0.3009, 'ROUGE': 0.5526, 'CIDEr': 2.2241}
+=========== Train ===============
+[MTL-Train] Epoch: 30/100 MTL_Loss: -3.635062 Graph_Acc: 0.496646
+=========== Evaluation ===============
+Graph : {acc: 0.5960 map: 0.2408 ece:0.1232 loss: 1.706876}
+Caption Scores : {'BLEU': array([0.5195, 0.4467, 0.3852, 0.3309]), 'METEOR': 0.2892, 'ROUGE': 0.5341, 'CIDEr': 2.3027}
+=========== Train ===============
+[MTL-Train] Epoch: 31/100 MTL_Loss: -3.822600 Graph_Acc: 0.500939
+=========== Evaluation ===============
+Graph : {acc: 0.6227 map: 0.2307 ece:0.0978 loss: 1.732494}
+Caption Scores : {'BLEU': array([0.5112, 0.4426, 0.3875, 0.3408]), 'METEOR': 0.2852, 'ROUGE': 0.5311, 'CIDEr': 2.1625}
+=========== Train ===============
+[MTL-Train] Epoch: 32/100 MTL_Loss: -3.981129 Graph_Acc: 0.508988
+=========== Evaluation ===============
+Graph : {acc: 0.6133 map: 0.2253 ece:0.1143 loss: 1.750563}
+Caption Scores : {'BLEU': array([0.5262, 0.4578, 0.3988, 0.3473]), 'METEOR': 0.3065, 'ROUGE': 0.5442, 'CIDEr': 2.5714}
+=========== Train ===============
+[MTL-Train] Epoch: 33/100 MTL_Loss: -4.154334 Graph_Acc: 0.510330
+=========== Evaluation ===============
+Graph : {acc: 0.6193 map: 0.2240 ece:0.1008 loss: 1.785017}
+Caption Scores : {'BLEU': array([0.4745, 0.4067, 0.3477, 0.2961]), 'METEOR': 0.2712, 'ROUGE': 0.4964, 'CIDEr': 1.9895}
+=========== Train ===============
+[MTL-Train] Epoch: 34/100 MTL_Loss: -4.298954 Graph_Acc: 0.513013
+=========== Evaluation ===============
+Graph : {acc: 0.6115 map: 0.2277 ece:0.1067 loss: 1.703214}
+Caption Scores : {'BLEU': array([0.4417, 0.3807, 0.3333, 0.2942]), 'METEOR': 0.2528, 'ROUGE': 0.5094, 'CIDEr': 2.1691}
+=========== Train ===============
+[MTL-Train] Epoch: 35/100 MTL_Loss: -4.510865 Graph_Acc: 0.502817
+=========== Evaluation ===============
+Graph : {acc: 0.6167 map: 0.2332 ece:0.1369 loss: 1.754313}
+Caption Scores : {'BLEU': array([0.5694, 0.5   , 0.4487, 0.4078]), 'METEOR': 0.3171, 'ROUGE': 0.6001, 'CIDEr': 3.0821}
+=========== Train ===============
+[MTL-Train] Epoch: 36/100 MTL_Loss: -4.662069 Graph_Acc: 0.524819
+=========== Evaluation ===============
+Graph : {acc: 0.6270 map: 0.2252 ece:0.1265 loss: 1.756334}
+Caption Scores : {'BLEU': array([0.5264, 0.458 , 0.4023, 0.3545]), 'METEOR': 0.2973, 'ROUGE': 0.5407, 'CIDEr': 2.3104}
+=========== Train ===============
+[MTL-Train] Epoch: 37/100 MTL_Loss: -4.867662 Graph_Acc: 0.529112
+=========== Evaluation ===============
+Graph : {acc: 0.6391 map: 0.2231 ece:0.1216 loss: 1.794606}
+Caption Scores : {'BLEU': array([0.6099, 0.5351, 0.4758, 0.4279]), 'METEOR': 0.3321, 'ROUGE': 0.6194, 'CIDEr': 3.0682}
+=========== Train ===============
+[MTL-Train] Epoch: 38/100 MTL_Loss: -5.055328 Graph_Acc: 0.528039
+=========== Evaluation ===============
+Graph : {acc: 0.6314 map: 0.2250 ece:0.1415 loss: 1.808935}
+Caption Scores : {'BLEU': array([0.4223, 0.3534, 0.3064, 0.2738]), 'METEOR': 0.2345, 'ROUGE': 0.5021, 'CIDEr': 2.124}
+=========== Train ===============
+[MTL-Train] Epoch: 39/100 MTL_Loss: -5.272341 Graph_Acc: 0.521599
+=========== Evaluation ===============
+Graph : {acc: 0.6072 map: 0.2290 ece:0.1538 loss: 1.826128}
+Caption Scores : {'BLEU': array([0.4753, 0.402 , 0.3402, 0.2841]), 'METEOR': 0.2685, 'ROUGE': 0.4964, 'CIDEr': 1.8266}
+=========== Train ===============
+[MTL-Train] Epoch: 40/100 MTL_Loss: -5.461453 Graph_Acc: 0.547357
+=========== Evaluation ===============
+Graph : {acc: 0.6219 map: 0.2242 ece:0.1579 loss: 1.803114}
+Caption Scores : {'BLEU': array([0.4517, 0.3712, 0.3136, 0.2721]), 'METEOR': 0.2418, 'ROUGE': 0.489, 'CIDEr': 1.7873}
+=========== Train ===============
+[MTL-Train] Epoch: 41/100 MTL_Loss: -5.601352 Graph_Acc: 0.555943
+=========== Evaluation ===============
+Graph : {acc: 0.6296 map: 0.2321 ece:0.1547 loss: 1.792403}
+Caption Scores : {'BLEU': array([0.4607, 0.3882, 0.3238, 0.2659]), 'METEOR': 0.259, 'ROUGE': 0.4808, 'CIDEr': 1.5507}
+=========== Train ===============
+[MTL-Train] Epoch: 42/100 MTL_Loss: -5.816071 Graph_Acc: 0.547089
+=========== Evaluation ===============
+Graph : {acc: 0.6365 map: 0.2324 ece:0.1602 loss: 1.766115}
+Caption Scores : {'BLEU': array([0.3955, 0.3174, 0.2702, 0.2393]), 'METEOR': 0.2116, 'ROUGE': 0.4683, 'CIDEr': 1.6191}
+=========== Train ===============
+[MTL-Train] Epoch: 43/100 MTL_Loss: -5.978736 Graph_Acc: 0.555675
+=========== Evaluation ===============
+Graph : {acc: 0.6245 map: 0.2317 ece:0.1610 loss: 1.829821}
+Caption Scores : {'BLEU': array([0.4366, 0.36  , 0.3127, 0.2783]), 'METEOR': 0.2309, 'ROUGE': 0.4889, 'CIDEr': 1.7931}
+=========== Train ===============
+[MTL-Train] Epoch: 44/100 MTL_Loss: -6.166116 Graph_Acc: 0.538771
+=========== Evaluation ===============
+Graph : {acc: 0.6408 map: 0.2356 ece:0.1607 loss: 1.848351}
+Caption Scores : {'BLEU': array([0.4857, 0.4214, 0.3746, 0.3361]), 'METEOR': 0.2687, 'ROUGE': 0.5473, 'CIDEr': 2.0958}
+=========== Train ===============
+[MTL-Train] Epoch: 45/100 MTL_Loss: -6.375083 Graph_Acc: 0.552992
+=========== Evaluation ===============
+Graph : {acc: 0.6184 map: 0.2342 ece:0.2181 loss: 1.958997}
+Caption Scores : {'BLEU': array([0.5646, 0.5022, 0.4555, 0.4143]), 'METEOR': 0.3158, 'ROUGE': 0.6078, 'CIDEr': 2.9728}
+=========== Train ===============
+[MTL-Train] Epoch: 46/100 MTL_Loss: -6.558687 Graph_Acc: 0.547357
+=========== Evaluation ===============
+Graph : {acc: 0.6288 map: 0.2314 ece:0.1852 loss: 1.854808}
+Caption Scores : {'BLEU': array([0.5087, 0.4365, 0.3724, 0.3154]), 'METEOR': 0.285, 'ROUGE': 0.5143, 'CIDEr': 1.7804}
+=========== Train ===============
+[MTL-Train] Epoch: 47/100 MTL_Loss: -6.816562 Graph_Acc: 0.564797
+=========== Evaluation ===============
+Graph : {acc: 0.6262 map: 0.2247 ece:0.2045 loss: 1.992053}
+Caption Scores : {'BLEU': array([0.4478, 0.3754, 0.3255, 0.2866]), 'METEOR': 0.2458, 'ROUGE': 0.5116, 'CIDEr': 1.9101}
+=========== Train ===============
+[MTL-Train] Epoch: 48/100 MTL_Loss: -6.996843 Graph_Acc: 0.569090
+=========== Evaluation ===============
+Graph : {acc: 0.6460 map: 0.2405 ece:0.1775 loss: 1.876561}
+Caption Scores : {'BLEU': array([0.4499, 0.3691, 0.3164, 0.2788]), 'METEOR': 0.2338, 'ROUGE': 0.4879, 'CIDEr': 1.6408}
+=========== Train ===============
+[MTL-Train] Epoch: 49/100 MTL_Loss: -7.186889 Graph_Acc: 0.573920
+=========== Evaluation ===============
+Graph : {acc: 0.6253 map: 0.2136 ece:0.2096 loss: 2.083953}
+Caption Scores : {'BLEU': array([0.505 , 0.4263, 0.3672, 0.3217]), 'METEOR': 0.2689, 'ROUGE': 0.5208, 'CIDEr': 1.8683}
+=========== Train ===============
+[MTL-Train] Epoch: 50/100 MTL_Loss: -7.365294 Graph_Acc: 0.587336
+=========== Evaluation ===============
+Graph : {acc: 0.6374 map: 0.2273 ece:0.1882 loss: 1.947520}
+Caption Scores : {'BLEU': array([0.4509, 0.3839, 0.3296, 0.2834]), 'METEOR': 0.2544, 'ROUGE': 0.5038, 'CIDEr': 2.0225}
+
+
+
+
+
+
+###########################################################################################################################
+mtl_kd_train : UDA: R18_11 CBS (4,0.985): Learning_rate:  7.5e-06
+DA_TD_SC_CBS_KL
+###########################################################################################################################
+Graph : {acc: 0.3362 map: 0.0850 ece:0.3878 loss: 3.322690}
+Caption Scores : {'BLEU': array([0.1918, 0.1055, 0.0648, 0.0326]), 'METEOR': 0.1076, 'ROUGE': 0.307, 'CIDEr': 0.1851}
+Learning_rate:  7.5e-06
+=========== Train ===============
+[MTL-Train] Epoch: 1/100 MTL_Loss: -3.909100 Graph_Acc: 0.306878
+=========== Evaluation ===============
+Graph : {acc: 0.3610 map: 0.0862 ece:0.2856 loss: 3.004413}
+Caption Scores : {'BLEU': array([0.3302, 0.2127, 0.167 , 0.1295]), 'METEOR': 0.159, 'ROUGE': 0.363, 'CIDEr': 0.4561}
+=========== Train ===============
+[MTL-Train] Epoch: 2/100 MTL_Loss: -4.239052 Graph_Acc: 0.396825
+=========== Evaluation ===============
+Graph : {acc: 0.4003 map: 0.0839 ece:0.2524 loss: 2.899485}
+Caption Scores : {'BLEU': array([0.3227, 0.2288, 0.1867, 0.1487]), 'METEOR': 0.1642, 'ROUGE': 0.3882, 'CIDEr': 0.7236}
+=========== Train ===============
+[MTL-Train] Epoch: 3/100 MTL_Loss: -4.367704 Graph_Acc: 0.412698
+=========== Evaluation ===============
+Graph : {acc: 0.3770 map: 0.0835 ece:0.2501 loss: 2.841525}
+Caption Scores : {'BLEU': array([0.2942, 0.2093, 0.1727, 0.1401]), 'METEOR': 0.1549, 'ROUGE': 0.3718, 'CIDEr': 0.6655}
+=========== Train ===============
+[MTL-Train] Epoch: 4/100 MTL_Loss: -4.480760 Graph_Acc: 0.375661
+=========== Evaluation ===============
+Graph : {acc: 0.3144 map: 0.0824 ece:0.2700 loss: 2.837189}
+Caption Scores : {'BLEU': array([0.3053, 0.2315, 0.1974, 0.1683]), 'METEOR': 0.1738, 'ROUGE': 0.4156, 'CIDEr': 1.1618}
+=========== Train ===============
+[MTL-Train] Epoch: 5/100 MTL_Loss: -4.656078 Graph_Acc: 0.417989
+=========== Evaluation ===============
+Graph : {acc: 0.3144 map: 0.0823 ece:0.2915 loss: 2.831995}
+Caption Scores : {'BLEU': array([0.2592, 0.2005, 0.173 , 0.151 ]), 'METEOR': 0.1619, 'ROUGE': 0.4056, 'CIDEr': 1.3633}
+=========== Train ===============
+[MTL-Train] Epoch: 6/100 MTL_Loss: -4.554571 Graph_Acc: 0.455026
+=========== Evaluation ===============
+Graph : {acc: 0.3217 map: 0.0822 ece:0.2919 loss: 2.801613}
+Caption Scores : {'BLEU': array([0.2519, 0.2037, 0.1798, 0.1586]), 'METEOR': 0.1638, 'ROUGE': 0.4086, 'CIDEr': 1.316}
+=========== Train ===============
+[MTL-Train] Epoch: 7/100 MTL_Loss: -4.683688 Graph_Acc: 0.455026
+=========== Evaluation ===============
+Graph : {acc: 0.3188 map: 0.0825 ece:0.2780 loss: 2.747570}
+Caption Scores : {'BLEU': array([0.2369, 0.1888, 0.1652, 0.1458]), 'METEOR': 0.1578, 'ROUGE': 0.4071, 'CIDEr': 1.329}
+=========== Train ===============
+[MTL-Train] Epoch: 8/100 MTL_Loss: -4.727014 Graph_Acc: 0.433862
+=========== Evaluation ===============
+Graph : {acc: 0.3188 map: 0.0838 ece:0.2763 loss: 2.728400}
+Caption Scores : {'BLEU': array([0.2312, 0.1796, 0.1555, 0.137 ]), 'METEOR': 0.151, 'ROUGE': 0.3948, 'CIDEr': 1.2956}
+=========== Train ===============
+[MTL-Train] Epoch: 9/100 MTL_Loss: -4.659906 Graph_Acc: 0.486772
+=========== Evaluation ===============
+Graph : {acc: 0.3144 map: 0.0833 ece:0.2979 loss: 2.760698}
+Caption Scores : {'BLEU': array([0.2379, 0.1823, 0.1564, 0.1376]), 'METEOR': 0.1528, 'ROUGE': 0.3959, 'CIDEr': 1.2987}
+=========== Train ===============
+[MTL-Train] Epoch: 10/100 MTL_Loss: -4.564217 Graph_Acc: 0.417989
+=========== Evaluation ===============
+Graph : {acc: 0.3304 map: 0.0834 ece:0.2891 loss: 2.740340}
+Caption Scores : {'BLEU': array([0.2349, 0.181 , 0.1556, 0.1364]), 'METEOR': 0.1515, 'ROUGE': 0.3958, 'CIDEr': 1.2915}
+=========== Train ===============
+[MTL-Train] Epoch: 11/100 MTL_Loss: -4.693369 Graph_Acc: 0.486772
+=========== Evaluation ===============
+Graph : {acc: 0.3523 map: 0.0855 ece:0.2758 loss: 2.667763}
+Caption Scores : {'BLEU': array([0.2407, 0.1852, 0.16  , 0.1416]), 'METEOR': 0.1537, 'ROUGE': 0.3974, 'CIDEr': 1.3348}
+=========== Train ===============
+[MTL-Train] Epoch: 12/100 MTL_Loss: -4.776906 Graph_Acc: 0.523810
+=========== Evaluation ===============
+Graph : {acc: 0.3319 map: 0.0846 ece:0.2704 loss: 2.657006}
+Caption Scores : {'BLEU': array([0.2379, 0.1817, 0.1557, 0.1368]), 'METEOR': 0.1521, 'ROUGE': 0.3947, 'CIDEr': 1.2913}
+=========== Train ===============
+[MTL-Train] Epoch: 13/100 MTL_Loss: -4.707738 Graph_Acc: 0.507937
+=========== Evaluation ===============
+Graph : {acc: 0.3304 map: 0.0837 ece:0.2838 loss: 2.684048}
+Caption Scores : {'BLEU': array([0.2413, 0.1865, 0.1611, 0.1425]), 'METEOR': 0.1555, 'ROUGE': 0.4014, 'CIDEr': 1.3869}
+=========== Train ===============
+[MTL-Train] Epoch: 14/100 MTL_Loss: -4.840904 Graph_Acc: 0.439153
+=========== Evaluation ===============
+Graph : {acc: 0.3290 map: 0.0831 ece:0.2916 loss: 2.701797}
+Caption Scores : {'BLEU': array([0.2386, 0.1831, 0.1576, 0.1394]), 'METEOR': 0.1529, 'ROUGE': 0.3958, 'CIDEr': 1.3066}
+=========== Train ===============
+[MTL-Train] Epoch: 15/100 MTL_Loss: -4.672522 Graph_Acc: 0.449735
+=========== Evaluation ===============
+Graph : {acc: 0.3406 map: 0.0831 ece:0.3104 loss: 2.714403}
+Caption Scores : {'BLEU': array([0.2532, 0.2019, 0.1777, 0.1597]), 'METEOR': 0.1627, 'ROUGE': 0.4109, 'CIDEr': 1.4631}
+=========== Train ===============
+[MTL-Train] Epoch: 16/100 MTL_Loss: -4.728851 Graph_Acc: 0.481481
+=========== Evaluation ===============
+Graph : {acc: 0.3392 map: 0.0843 ece:0.2988 loss: 2.643313}
+Caption Scores : {'BLEU': array([0.2406, 0.1853, 0.1598, 0.1413]), 'METEOR': 0.1539, 'ROUGE': 0.3987, 'CIDEr': 1.336}
+=========== Train ===============
+[MTL-Train] Epoch: 17/100 MTL_Loss: -4.885750 Graph_Acc: 0.444444
+=========== Evaluation ===============
+Graph : {acc: 0.3595 map: 0.0843 ece:0.2905 loss: 2.647133}
+Caption Scores : {'BLEU': array([0.2505, 0.1955, 0.17  , 0.1521]), 'METEOR': 0.1589, 'ROUGE': 0.404, 'CIDEr': 1.3923}
+=========== Train ===============
+[MTL-Train] Epoch: 18/100 MTL_Loss: -4.855445 Graph_Acc: 0.449735
+=========== Evaluation ===============
+Graph : {acc: 0.3595 map: 0.0845 ece:0.2881 loss: 2.636746}
+Caption Scores : {'BLEU': array([0.2429, 0.1881, 0.1622, 0.1434]), 'METEOR': 0.156, 'ROUGE': 0.4023, 'CIDEr': 1.3605}
+=========== Train ===============
+[MTL-Train] Epoch: 19/100 MTL_Loss: -4.916843 Graph_Acc: 0.460317
+=========== Evaluation ===============
+Graph : {acc: 0.3566 map: 0.0836 ece:0.2959 loss: 2.655405}
+Caption Scores : {'BLEU': array([0.2472, 0.1908, 0.1647, 0.1459]), 'METEOR': 0.1566, 'ROUGE': 0.4016, 'CIDEr': 1.352}
+=========== Train ===============
+[MTL-Train] Epoch: 20/100 MTL_Loss: -4.850496 Graph_Acc: 0.507937
+=========== Evaluation ===============
+Graph : {acc: 0.3523 map: 0.0838 ece:0.3115 loss: 2.632232}
+Caption Scores : {'BLEU': array([0.2438, 0.1866, 0.1603, 0.1412]), 'METEOR': 0.1542, 'ROUGE': 0.3975, 'CIDEr': 1.2966}
+=========== Train ===============
+[MTL-Train] Epoch: 21/100 MTL_Loss: -4.747180 Graph_Acc: 0.497354
+=========== Evaluation ===============
+Graph : {acc: 0.3406 map: 0.0830 ece:0.3179 loss: 2.639385}
+Caption Scores : {'BLEU': array([0.2473, 0.19  , 0.1638, 0.1453]), 'METEOR': 0.1558, 'ROUGE': 0.3987, 'CIDEr': 1.3302}
+=========== Train ===============
+[MTL-Train] Epoch: 22/100 MTL_Loss: -4.821068 Graph_Acc: 0.502646
+=========== Evaluation ===============
+Graph : {acc: 0.3231 map: 0.0827 ece:0.3086 loss: 2.649304}
+Caption Scores : {'BLEU': array([0.2571, 0.2008, 0.1751, 0.157 ]), 'METEOR': 0.161, 'ROUGE': 0.406, 'CIDEr': 1.4063}
+=========== Train ===============
+[MTL-Train] Epoch: 23/100 MTL_Loss: -4.796490 Graph_Acc: 0.497354
+=========== Evaluation ===============
+Graph : {acc: 0.3304 map: 0.0815 ece:0.3249 loss: 2.666295}
+Caption Scores : {'BLEU': array([0.2618, 0.2019, 0.1741, 0.1542]), 'METEOR': 0.159, 'ROUGE': 0.4033, 'CIDEr': 1.3661}
+=========== Train ===============
+[MTL-Train] Epoch: 24/100 MTL_Loss: -4.803876 Graph_Acc: 0.518519
+=========== Evaluation ===============
+Graph : {acc: 0.3464 map: 0.0821 ece:0.2920 loss: 2.633010}
+Caption Scores : {'BLEU': array([0.2699, 0.2087, 0.181 , 0.1621]), 'METEOR': 0.1623, 'ROUGE': 0.4078, 'CIDEr': 1.4257}
+=========== Train ===============
+[MTL-Train] Epoch: 25/100 MTL_Loss: -4.886181 Graph_Acc: 0.476190
+=========== Evaluation ===============
+Graph : {acc: 0.3581 map: 0.0835 ece:0.2566 loss: 2.586723}
+Caption Scores : {'BLEU': array([0.2599, 0.1993, 0.1728, 0.1553]), 'METEOR': 0.1574, 'ROUGE': 0.401, 'CIDEr': 1.3729}
+=========== Train ===============
+[MTL-Train] Epoch: 26/100 MTL_Loss: -5.124938 Graph_Acc: 0.513228
+=========== Evaluation ===============
+Graph : {acc: 0.3523 map: 0.0829 ece:0.2598 loss: 2.590385}
+Caption Scores : {'BLEU': array([0.2593, 0.1983, 0.1709, 0.1519]), 'METEOR': 0.1576, 'ROUGE': 0.4029, 'CIDEr': 1.3671}
+=========== Train ===============
+[MTL-Train] Epoch: 27/100 MTL_Loss: -5.105158 Graph_Acc: 0.518519
+=========== Evaluation ===============
+Graph : {acc: 0.3464 map: 0.0828 ece:0.2802 loss: 2.595450}
+Caption Scores : {'BLEU': array([0.2512, 0.1919, 0.1655, 0.1472]), 'METEOR': 0.1554, 'ROUGE': 0.3973, 'CIDEr': 1.3179}
+=========== Train ===============
+[MTL-Train] Epoch: 28/100 MTL_Loss: -5.051339 Graph_Acc: 0.550265
+=========== Evaluation ===============
+Graph : {acc: 0.3464 map: 0.0835 ece:0.2793 loss: 2.578500}
+Caption Scores : {'BLEU': array([0.2624, 0.2022, 0.1751, 0.1567]), 'METEOR': 0.1593, 'ROUGE': 0.4009, 'CIDEr': 1.3637}
+=========== Train ===============
+[MTL-Train] Epoch: 29/100 MTL_Loss: -5.033398 Graph_Acc: 0.460317
+=========== Evaluation ===============
+Graph : {acc: 0.3537 map: 0.0817 ece:0.2952 loss: 2.604266}
+Caption Scores : {'BLEU': array([0.2464, 0.1884, 0.1632, 0.1467]), 'METEOR': 0.1534, 'ROUGE': 0.3931, 'CIDEr': 1.3325}
+=========== Train ===============
+[MTL-Train] Epoch: 30/100 MTL_Loss: -5.084688 Graph_Acc: 0.444444
+=========== Evaluation ===============
+Graph : {acc: 0.3654 map: 0.0812 ece:0.2809 loss: 2.610794}
+Caption Scores : {'BLEU': array([0.2556, 0.1951, 0.1686, 0.1509]), 'METEOR': 0.1542, 'ROUGE': 0.3961, 'CIDEr': 1.3276}
+=========== Train ===============
+[MTL-Train] Epoch: 31/100 MTL_Loss: -5.030537 Graph_Acc: 0.497354
+=========== Evaluation ===============
+Graph : {acc: 0.3479 map: 0.0809 ece:0.2981 loss: 2.624719}
+Caption Scores : {'BLEU': array([0.2815, 0.2174, 0.188 , 0.1673]), 'METEOR': 0.166, 'ROUGE': 0.4112, 'CIDEr': 1.4657}
+=========== Train ===============
+[MTL-Train] Epoch: 32/100 MTL_Loss: -4.899407 Graph_Acc: 0.529101
+=========== Evaluation ===============
+Graph : {acc: 0.3654 map: 0.0800 ece:0.3056 loss: 2.622635}
+Caption Scores : {'BLEU': array([0.2865, 0.2166, 0.1846, 0.1616]), 'METEOR': 0.162, 'ROUGE': 0.402, 'CIDEr': 1.3311}
+=========== Train ===============
+[MTL-Train] Epoch: 33/100 MTL_Loss: -5.084008 Graph_Acc: 0.513228
+=========== Evaluation ===============
+Graph : {acc: 0.3624 map: 0.0804 ece:0.2867 loss: 2.607153}
+Caption Scores : {'BLEU': array([0.2809, 0.2107, 0.1793, 0.1575]), 'METEOR': 0.1593, 'ROUGE': 0.4, 'CIDEr': 1.3268}
+=========== Train ===============
+[MTL-Train] Epoch: 34/100 MTL_Loss: -5.018730 Graph_Acc: 0.470899
+=========== Evaluation ===============
+Graph : {acc: 0.3741 map: 0.0804 ece:0.2871 loss: 2.592691}
+Caption Scores : {'BLEU': array([0.2705, 0.211 , 0.1838, 0.1648]), 'METEOR': 0.165, 'ROUGE': 0.4084, 'CIDEr': 1.4503}
+=========== Train ===============
+[MTL-Train] Epoch: 35/100 MTL_Loss: -4.939423 Graph_Acc: 0.476190
+=========== Evaluation ===============
+Graph : {acc: 0.3770 map: 0.0810 ece:0.2766 loss: 2.575056}
+Caption Scores : {'BLEU': array([0.2666, 0.2024, 0.1732, 0.1525]), 'METEOR': 0.1584, 'ROUGE': 0.4001, 'CIDEr': 1.3427}
+=========== Train ===============
+[MTL-Train] Epoch: 36/100 MTL_Loss: -4.899060 Graph_Acc: 0.513228
+=========== Evaluation ===============
+Graph : {acc: 0.3624 map: 0.0822 ece:0.2648 loss: 2.557664}
+Caption Scores : {'BLEU': array([0.2838, 0.2191, 0.1891, 0.1676]), 'METEOR': 0.1655, 'ROUGE': 0.4098, 'CIDEr': 1.4322}
+=========== Train ===============
+[MTL-Train] Epoch: 37/100 MTL_Loss: -4.987747 Graph_Acc: 0.476190
+=========== Evaluation ===============
+Graph : {acc: 0.3261 map: 0.0836 ece:0.2883 loss: 2.577436}
+Caption Scores : {'BLEU': array([0.2776, 0.2143, 0.1855, 0.1652]), 'METEOR': 0.1644, 'ROUGE': 0.4095, 'CIDEr': 1.4389}
+=========== Train ===============
+[MTL-Train] Epoch: 38/100 MTL_Loss: -5.082764 Graph_Acc: 0.492063
+=========== Evaluation ===============
+Graph : {acc: 0.3362 map: 0.0847 ece:0.2811 loss: 2.556755}
+Caption Scores : {'BLEU': array([0.2734, 0.2087, 0.1789, 0.1577]), 'METEOR': 0.1604, 'ROUGE': 0.4025, 'CIDEr': 1.3334}
+=========== Train ===============
+[MTL-Train] Epoch: 39/100 MTL_Loss: -5.017833 Graph_Acc: 0.513228
+=========== Evaluation ===============
+Graph : {acc: 0.3552 map: 0.0836 ece:0.2923 loss: 2.576354}
+Caption Scores : {'BLEU': array([0.2602, 0.2034, 0.1776, 0.1602]), 'METEOR': 0.1629, 'ROUGE': 0.4087, 'CIDEr': 1.4784}
+=========== Train ===============
+[MTL-Train] Epoch: 40/100 MTL_Loss: -5.194107 Graph_Acc: 0.470899
+=========== Evaluation ===============
+Graph : {acc: 0.3595 map: 0.0842 ece:0.2879 loss: 2.564357}
+Caption Scores : {'BLEU': array([0.283 , 0.2149, 0.1834, 0.1606]), 'METEOR': 0.1629, 'ROUGE': 0.4071, 'CIDEr': 1.3999}
+=========== Train ===============
+[MTL-Train] Epoch: 41/100 MTL_Loss: -5.082012 Graph_Acc: 0.539683
+=========== Evaluation ===============
+Graph : {acc: 0.3406 map: 0.0853 ece:0.2813 loss: 2.541294}
+Caption Scores : {'BLEU': array([0.2831, 0.2153, 0.1853, 0.1647]), 'METEOR': 0.1628, 'ROUGE': 0.4041, 'CIDEr': 1.3917}
+=========== Train ===============
+[MTL-Train] Epoch: 42/100 MTL_Loss: -5.019312 Graph_Acc: 0.433862
+=========== Evaluation ===============
+Graph : {acc: 0.3479 map: 0.0856 ece:0.2669 loss: 2.535792}
+Caption Scores : {'BLEU': array([0.2839, 0.2246, 0.198 , 0.1805]), 'METEOR': 0.172, 'ROUGE': 0.4191, 'CIDEr': 1.6126}
+=========== Train ===============
+[MTL-Train] Epoch: 43/100 MTL_Loss: -5.114621 Graph_Acc: 0.497354
+=========== Evaluation ===============
+Graph : {acc: 0.3508 map: 0.0886 ece:0.2657 loss: 2.545074}
+Caption Scores : {'BLEU': array([0.2851, 0.2149, 0.1822, 0.1579]), 'METEOR': 0.1623, 'ROUGE': 0.4053, 'CIDEr': 1.3625}
+=========== Train ===============
+[MTL-Train] Epoch: 44/100 MTL_Loss: -4.932055 Graph_Acc: 0.518519
+=========== Evaluation ===============
+Graph : {acc: 0.3508 map: 0.0869 ece:0.2752 loss: 2.560331}
+Caption Scores : {'BLEU': array([0.2638, 0.2005, 0.1728, 0.1545]), 'METEOR': 0.1572, 'ROUGE': 0.3951, 'CIDEr': 1.3341}
+=========== Train ===============
+[MTL-Train] Epoch: 45/100 MTL_Loss: -4.986246 Graph_Acc: 0.539683
+=========== Evaluation ===============
+Graph : {acc: 0.3479 map: 0.0861 ece:0.2856 loss: 2.587026}
+Caption Scores : {'BLEU': array([0.2804, 0.2155, 0.186 , 0.1655]), 'METEOR': 0.165, 'ROUGE': 0.4116, 'CIDEr': 1.4404}
+=========== Train ===============
+[MTL-Train] Epoch: 46/100 MTL_Loss: -5.132177 Graph_Acc: 0.534392
+=========== Evaluation ===============
+Graph : {acc: 0.3508 map: 0.0882 ece:0.2660 loss: 2.542527}
+Caption Scores : {'BLEU': array([0.2936, 0.2203, 0.1867, 0.1622]), 'METEOR': 0.1634, 'ROUGE': 0.4052, 'CIDEr': 1.3684}
+=========== Train ===============
+[MTL-Train] Epoch: 47/100 MTL_Loss: -5.098473 Graph_Acc: 0.523810
+=========== Evaluation ===============
+Graph : {acc: 0.3668 map: 0.0875 ece:0.2693 loss: 2.543099}
+Caption Scores : {'BLEU': array([0.2772, 0.2084, 0.1769, 0.1541]), 'METEOR': 0.1598, 'ROUGE': 0.4021, 'CIDEr': 1.3375}
+=========== Train ===============
+[MTL-Train] Epoch: 48/100 MTL_Loss: -5.023465 Graph_Acc: 0.550265
+=========== Evaluation ===============
+Graph : {acc: 0.3202 map: 0.0864 ece:0.2952 loss: 2.578407}
+Caption Scores : {'BLEU': array([0.2885, 0.2083, 0.1728, 0.1475]), 'METEOR': 0.1548, 'ROUGE': 0.3907, 'CIDEr': 1.2156}
+=========== Train ===============
+[MTL-Train] Epoch: 49/100 MTL_Loss: -5.117844 Graph_Acc: 0.513228
+=========== Evaluation ===============
+Graph : {acc: 0.3246 map: 0.0864 ece:0.2959 loss: 2.586878}
+Caption Scores : {'BLEU': array([0.3163, 0.2282, 0.1887, 0.1592]), 'METEOR': 0.1605, 'ROUGE': 0.395, 'CIDEr': 1.1682}
+=========== Train ===============
+[MTL-Train] Epoch: 50/100 MTL_Loss: -5.103007 Graph_Acc: 0.518519
+=========== Evaluation ===============
+Graph : {acc: 0.3406 map: 0.0860 ece:0.2970 loss: 2.605345}
+Caption Scores : {'BLEU': array([0.296 , 0.2197, 0.1849, 0.1593]), 'METEOR': 0.1605, 'ROUGE': 0.3992, 'CIDEr': 1.249}
+
+
+

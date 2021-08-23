@@ -63,7 +63,7 @@ class CONFIGURATION(object):
                 self.G_E_D             = dropout  # 0.3
                 self.G_E_c_std         = 1.0
                 self.G_E_c_std_factor  = 0.985      # 0.985 (LOG), 0.95 (gau)
-                self.G_E_c_epoch       = 20
+                self.G_E_c_epoch       = 4
                 self.G_E_c_kernel_size = 3
                 self.G_E_c_filter      = 'LOG' # 'gau', 'LOG'
 

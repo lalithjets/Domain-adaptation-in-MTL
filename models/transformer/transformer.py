@@ -5,7 +5,7 @@ import torch
 from torch import nn
 import copy
 from models.containers import ModuleList
-from ..captioning_model import CaptioningModel
+from ..caption import CaptioningModel
 
 
 class Transformer(CaptioningModel):
