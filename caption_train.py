@@ -1,8 +1,15 @@
 
 '''
-Paper: Incremental Domain Adaptation with Smoothing and Calibration for Surgical Report Generation
-Authors: Mengya Xu, Mobarakol Islam
-Date: 03/03/2020
+Paper       : Class Incremental Domain Adaptation for MTL-SD based Surgical Scene Understanding
+Authors     :
+Date        :
+Code adopted from:
+            @article{xu2021class,
+                    title={Class-Incremental Domain Adaptation with Smoothing and Calibration for Surgical Report Generation},
+                    author={Xu, Mengya and Islam, Mobarakol and Lim, Chwee Ming and Ren, Hongliang},
+                    journal={arXiv preprint arXiv:2107.11091},
+                    year={2021}
+                }
 '''
 import random
 from data import ImageDetectionsField, TextField, RawField
@@ -13,13 +20,11 @@ from models.transformer import Transformer, MemoryAugmentedEncoder, MeshedDecode
 import torch
 from torch.optim import Adam
 from torch.optim.lr_scheduler import LambdaLR
-from torch.nn import NLLLoss
 import torch.nn.functional as F
 from tqdm import tqdm
 import argparse, os, pickle
 import numpy as np
-import itertools
-import multiprocessing
+
 from shutil import copyfile
 import warnings
 warnings.filterwarnings("ignore")
