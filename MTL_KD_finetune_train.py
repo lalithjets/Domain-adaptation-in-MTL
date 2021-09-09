@@ -1,7 +1,7 @@
 '''
 Paper: Task-Aware Asynchronous MTL with  Class Incremental Contrastive Learning for Surgical Scene Understanding
-Lab: MMLAB
-Authors: Lalithkumar Seenivasan, Mobarakol Islam, Mengya Xu, Hongliang Ren
+Authors: 
+Date: 
 '''
 
 import os
@@ -183,7 +183,7 @@ def eval_mtl(model, dataloader, text_field):
     scene_graph_total_loss = scene_graph_total_loss / len(dataloader)
     scene_graph_total_acc = scene_graph_total_acc / scene_graph_edge_count
 
-    # caption   
+    # caption    
     gts = evaluation.PTBTokenizer.tokenize(gts)
     gen = evaluation.PTBTokenizer.tokenize(gen)
     scores, _ = evaluation.compute_scores(gts, gen)
@@ -193,19 +193,103 @@ def eval_mtl(model, dataloader, text_field):
     
     return
 
+
+def train(epoch, lrc, model, dataloader, dict_dataloader_val, text_field):
+    '''
+    Optimization Stage 5: Fine-tune the independently trained task model with combined loss
+    Takes in: Epoch no, learning rate, model, train dataloader, test dataloader and text_field.
+    Outputs: Trained model.
+    '''
+    
+    # graph criterian
+    scene_graph_criterion = nn.MultiLabelSoftMarginLoss()
+    
+    # optimizer 
+    optimizer = optim.Adam(model.parameters(), lr= lrc, weight_decay=0)
+       
+    for epoch_count in range(epoch):
+        
+        print("=========== Train ===============")
+        iters = 0
+        running_loss = 0.0
+        running_scene_graph_acc = 0.0
+        running_scene_graph_edge_count = 0
+
+        model.train()
+        
+        for data in tqdm(dataloader):
+            
+            iters += 1
+            
+            # graph scene input
+            img_loc = data['gsu']['img_loc']
+            node_num = data['gsu']['node_num']
+            roi_labels = data['gsu']['roi_labels']
+            det_boxes = data['gsu']['det_boxes']
+            edge_labels = data['gsu']['edge_labels']
+            spatial_feat = data['gsu']['spatial_feat']
+            word2vec = data['gsu']['word2vec']
+            spatial_feat, word2vec, edge_labels = spatial_feat.to(device), word2vec.to(device), edge_labels.to(device)    
+            
+            # caption input
+            caption_nodes, caps_gt = data['cp']
+            caption_nodes, caps_gt = caption_nodes.to(device), caps_gt.to(device)
+            
+            # forward propagation
+            interaction, caption = model( img_loc, det_boxes, caps_gt, node_num, spatial_feat, word2vec, roi_labels, val = False)
+            
+            # scene graph loss and acc calculation
+            scene_graph_loss = scene_graph_criterion(interaction, edge_labels.float())
+            interaction = F.softmax(interaction, dim=1)
+            scene_graph_acc = np.sum(np.equal(np.argmax(interaction.cpu().data.numpy(), axis=-1), np.argmax(edge_labels.cpu().data.numpy(), axis=-1)))
+                    
+            # caption loss
+            captain_criterion = CELossWithLS(classes=len(text_field.vocab), smoothing=0.1, gamma=0.0, isCos=False, ignore_index=text_field.vocab.stoi['<pad>'])
+            caption_loss = captain_criterion(caption[:, :-1].contiguous(), caps_gt[:, 1:].contiguous())
+            
+            # loss calculation and back propagation
+            loss = (0.5 * scene_graph_loss) + (0.5 * caption_loss)
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+            
+            # accumulate batch loss and scene graph accuracy
+            running_loss += loss.item()
+            running_scene_graph_acc += scene_graph_acc
+            running_scene_graph_edge_count += edge_labels.shape[0]
+            #break
+        
+        # epoch loss and graphs scene acc
+        epoch_loss = running_loss/float(iters)
+        epoch_g_acc = running_scene_graph_acc/float(running_scene_graph_edge_count)
+
+        print("[{}] Epoch: {}/{} MTL_Loss: {:0.6f} Graph_Acc: {:0.6f}".format('MTL-Train', epoch_count+1, epoch, epoch_loss, epoch_g_acc))
+        
+        # save checkpoint
+        checkpoint = {'state_dict': model.state_dict()}
+        save_name = "checkpoints/mtl_train/"+args.mtl_version+"/checkpoint_" + str(epoch_count+1) + '_epoch.pth'
+        torch.save(checkpoint, os.path.join(save_name))
+        
+        # evaluate epoch performance
+        print("=========== Evaluation ===============")
+        eval_mtl(model, dict_dataloader_val, text_field)
+
+    return
+
+
 if __name__ == "__main__":
     
-    os.environ["CUDA_VISIBLE_DEVICES"]="2"
+    os.environ["CUDA_VISIBLE_DEVICES"]="1"
     device = torch.device('cuda')
     
-    parser = argparse.ArgumentParser(description=' Class_Incremental_Domain_Adaptation_for MTL_SD_based_Surgical_Scene_Understanding')
+    parser = argparse.ArgumentParser(description='Class_Incremental_Domain_Adaptation_for MTL_SD_based_Surgical_Scene_Understanding')
     ''' Hyperparams'''
     parser.add_argument('--batch_size',            type=int,       default=4)
     parser.add_argument('--workers',               type=int,       default=0)
     parser.add_argument('--epoch',                 type=int,       default=100)
     parser.add_argument('--lr',                    type=float,     default=0.0000075)
     
-    ''' feature extractor'''
+    ''' Feature extractor '''
     parser.add_argument('--fe_use_cbs',            type=bool,      default=True,        help='use CBS')
     parser.add_argument('--fe_std',                type=float,     default=1.0,         help='')
     parser.add_argument('--fe_std_factor',         type=float,     default=0.9,         help='')
@@ -217,7 +301,7 @@ if __name__ == "__main__":
     parser.add_argument('--fe_num_classes',        type=int,       default=11,          help='11')
     parser.add_argument('--fe_use_SC',             type=bool,      default=True,        help='use SuperCon')
     
-    ''' Caption model'''
+    ''' Caption model '''
     parser.add_argument('--exp_name',              type=str,       default='m2_transformer')
     parser.add_argument('--m',                     type=int,       default=40)   
     parser.add_argument('--cp_cbs',                type=str,       default='True')
@@ -232,76 +316,47 @@ if __name__ == "__main__":
     parser.add_argument('--gsu_feat',              type=str,       default='resnet18_09_SC_CBS')
     parser.add_argument('--gsu_w2v_loc',           type=str,       default='datasets/surgicalscene_word2vec.hdf5')
     
-    '''
-    =========================================================================
-                                        STL
-    -------------------------------------------------------------------------
-    # 1. STL                    : (a) UDA: {(i) SD, (ii) TD}, 
-    # 1. STL                    : (b) FEW: {(i) SD, (ii) TD}
-    -------------------------------------------------------------------------
-                                        MTL-FT
-    -------------------------------------------------------------------------
-    # 2. MTL_FT_UDA_SC_CBS      : (a) UDA: {(i) SD, (ii) TD} 
-    # 3. MTL_FT_DA_TD_SC_CBS    : (a) FEW: {(i) SD, (ii) TD} 
-    -------------------------------------------------------------------------
-                                        Vanilla-MTL
-    -------------------------------------------------------------------------
-    # 2. MTL_V_UDA_SC_CBS       : (a) UDA: {(i) SD, (ii) TD} 
-    # 3. MTL_V_DA_TD_SC_CBS     : (a) FEW: {(i) SD, (ii) TD}
-    -------------------------------------------------------------------------
-                                        MTL-KD
-    -------------------------------------------------------------------------
-    # 2. KL_UDA_SC_CBS          : (a) UDA: {(i) SD, (ii) TD} 
-    # 3. KL_DA_TD_SC_CBS        : (a) FEW: {(i) SD, (ii) TD} 
-    -------------------------------------------------------------------------
-                                        MTL-KD-FT
-    -------------------------------------------------------------------------
-    # 2. KL_FT_UDA_SC_CBS       : (a) UDA: {(i) SD, (ii) TD} 
-    # 3. KL_FT_DA_TD_SC_CBS     : (a) FEW: {(i) SD, (ii) TD} 
-    =========================================================================
-    '''
-    parser.add_argument('--mtl_version',           type=str,       default='MTL_FT_DA_TD_SC_CBS',   help='choose from top')
-    parser.add_argument('--adapt_type',            type=str,       default='FEW',                   help='UDA, FEW')
-    parser.add_argument('--domain',                type=str,       default='TD',                    help='SD, TD')
+    ''' Unsupervised domain adaptation '''
+    # #Source domain file dirs
+    # parser.add_argument('--cp_features_path',      type=str,       default='datasets/instruments18/') 
+    # parser.add_argument('--cp_annotation_folder',  type=str,       default='datasets/caption_annotations_SC_CBS/annotations_SD_base')
+    # parser.add_argument('--gsu_img_dir',           type=str,       default='left_frames')
+    # parser.add_argument('--gsu_file_dir',          type=str,       default='datasets/instruments18/')
+    # #Target domain file dirs
+    parser.add_argument('--cp_features_path',      type=str,       default='datasets/SGH_dataset_2020/') 
+    parser.add_argument('--cp_annotation_folder',  type=str,       default='datasets/caption_annotations_SC_CBS/annotations_TD_base')
+    parser.add_argument('--gsu_img_dir',           type=str,       default='resized_frames')
+    parser.add_argument('--gsu_file_dir',          type=str,       default='datasets/SGH_dataset_2020/')
+    # # UDA pre-trained checkpoint weights
+    parser.add_argument('--cp_checkpoint',         type=str,       default='checkpoints/c_checkpoints/SD_base_LOG/')
+    parser.add_argument('--gsu_checkpoint',        type=str,       default='checkpoints/g_checkpoints/da_ecbs_resnet18_09_SC_eCBS/da_ecbs_resnet18_09_SC_eCBS/epoch_train/checkpoint_D1230_epoch.pth')
+    parser.add_argument('--fe_modelpath',          type=str,       default='feature_extractor/checkpoint/incremental/inc_ResNet18_SC_CBS_0_012345678.pkl')
 
+    ''' Incremental domain adaptation '''
+    # Source domain incremental file dirs
+    # parser.add_argument('--cp_features_path',      type=str,       default='datasets/instruments18/') 
+    # parser.add_argument('--cp_annotation_folder',  type=str,       default='datasets/caption_annotations_SC_CBS/annotations_SD_inc')
+    # parser.add_argument('--gsu_img_dir',           type=str,       default='left_frames')
+    # parser.add_argument('--gsu_file_dir',          type=str,       default='datasets/instruments18/')
+    # # Target domain incremental file dirs
+    # parser.add_argument('--cp_features_path',      type=str,       default='datasets/SGH_dataset_2020/') 
+    # parser.add_argument('--cp_annotation_folder',  type=str,       default='datasets/caption_annotations_SC_CBS/annotations_TD_inc')
+    # parser.add_argument('--gsu_img_dir',           type=str,       default='resized_frames')
+    # parser.add_argument('--gsu_file_dir',          type=str,       default='datasets/SGH_dataset_2020/')
+    # # Source domain incremental domain adaption pre-trained checkpoint weights    
+    # parser.add_argument('--cp_checkpoint',         type=str,       default='checkpoints/c_checkpoints/SD_inc_LOG/')
+    # parser.add_argument('--gsu_checkpoint',        type=str,       default='checkpoints/g_checkpoints/da_ecbs_resnet18_11_SC_eCBS/da_ecbs_resnet18_11_SC_eCBS/epoch_train/checkpoint_D1250_epoch.pth')
+    # parser.add_argument('--fe_modelpath',          type=str,       default='feature_extractor/checkpoint/incremental/inc_ResNet18_SC_CBS_0_012345678910.pkl')
+    # Target domain incremental domain adaption pre-trained checkpoint weights    
+    # parser.add_argument('--cp_checkpoint',         type=str,       default='checkpoints/c_checkpoints/few_shot_TD_inc_LOG/')
+    # parser.add_argument('--gsu_checkpoint',        type=str,       default='checkpoints/g_checkpoints/da_ecbs_resnet18_11_SC_eCBS/da_ecbs_resnet18_11_SC_eCBS/epoch_train/checkpoint_D2210_epoch.pth')
+    # parser.add_argument('--fe_modelpath',          type=str,       default='feature_extractor/checkpoint/incremental/inc_ResNet18_SC_CBS_0_012345678910.pkl')
+
+    parser.add_argument('--mtl_version',           type=str,       default='KL_FT_DA_TD_SC_CBS')
     args = parser.parse_args()
-
-    # Source domain file dirs
-    if args.adapt_type == 'UDA':   
-        if args.domain == 'SD':
-            args.cp_features_path     = 'datasets/instruments18/' 
-            args.cp_annotation_folder = 'datasets/caption_annotations_SC_CBS/annotations_SD_base'
-            args.gsu_img_dir          = 'left_frames'
-            args.gsu_file_dir         = 'datasets/instruments18/'
-        elif args.domain == 'TD':
-            args.cp_features_path     = 'datasets/SGH_dataset_2020/'
-            args.cp_annotation_folder = 'datasets/caption_annotations_SC_CBS/annotations_TD_base'
-            args.gsu_img_dir          = 'resized_frames'
-            args.gsu_file_dir         = 'datasets/SGH_dataset_2020/'
-        # checkpoint
-        args.cp_checkpoint            = 'checkpoints/c_checkpoints/SD_base_LOG/'
-        args.gsu_checkpoint           = 'checkpoints/g_checkpoints/da_ecbs_resnet18_09_SC_eCBS/da_ecbs_resnet18_09_SC_eCBS/epoch_train/checkpoint_D1230_epoch.pth'
-        args.fe_modelpath             = 'feature_extractor/checkpoint/incremental/inc_ResNet18_SC_CBS_0_012345678.pkl'
-    
-    # ''' Incremental domain adaptation '''
-    if args.adapt_type == 'FEW':    
-        if args.domain == 'SD':
-            args.cp_features_path     = 'datasets/instruments18/'
-            args.cp_annotation_folder = 'datasets/caption_annotations_SC_CBS/annotations_SD_inc'
-            args.gsu_img_dir          = 'left_frames'
-            args.gsu_file_dir         = 'datasets/instruments18/'
-        if args.domain == 'TD':
-            args.cp_features_path     = 'datasets/SGH_dataset_2020/'
-            args.cp_annotation_folder = 'datasets/caption_annotations_SC_CBS/annotations_TD_inc'
-            args.gsu_img_dir          = 'resized_frames'
-            args.gsu_file_dir         = 'datasets/SGH_dataset_2020/'
-        # checkpoint
-        args.cp_checkpoint ='checkpoints/c_checkpoints/few_shot_TD_inc_LOG/'
-        args.gsu_checkpoint ='checkpoints/g_checkpoints/da_ecbs_resnet18_11_SC_eCBS/da_ecbs_resnet18_11_SC_eCBS/epoch_train/checkpoint_D2210_epoch.pth'
-        args.fe_modelpath ='feature_extractor/checkpoint/incremental/inc_ResNet18_SC_CBS_0_012345678910.pkl'
     print(args)
 
-    # seed models
+    # seed randoms
     seed_everything()
     
     '''======================================= Dataset ======================================='''
@@ -341,21 +396,17 @@ if __name__ == "__main__":
     dict_dataloader_val = DataLoader(dict_dataset_val, batch_size=args.batch_size, shuffle = False) # for caption with word GT class number
 
     '''==================================== Build MTL-model ======================================'''
-    model = build_model(args, text_field, device)
+    '''
+    '''
+    model = build_model(args, text_field, device, load_pretrain=False)
 
-    ''' Model evaluation '''
-    # best scene graph
-    print(args.mtl_version, ' : Best Scene Graph')
-    if args.mtl_version is not 'STL':
-        pretrained_model = torch.load('checkpoints/mtl_train/'+args.mtl_version+'/best_graph.pth')
-        model.load_state_dict(pretrained_model['state_dict'])
+    # print('Loading train model')
+    # pretrained_model = torch.load('checkpoints/mtl_train/KL_FT_UDA_SC_CBS/best_caption.pth')
+    # model.load_state_dict(pretrained_model['state_dict'])
+    
+    '''================================= initial model evaluation ================================'''
     eval_mtl(model, dict_dataloader_val, text_field)
-    
-    
-    # best caption
-    print(args.mtl_version, ' : Best Caption')
-    if args.mtl_version is not 'STL':
-        pretrained_model = torch.load('checkpoints/mtl_train/'+args.mtl_version+'/best_caption.pth')
-        model.load_state_dict(pretrained_model['state_dict'])
-    eval_mtl(model, dict_dataloader_val, text_field)
-    
+
+    ''''''
+    print('Learning_rate: ', args.lr)
+    train(args.epoch, args.lr, model, train_dataloader, dict_dataloader_val, text_field)

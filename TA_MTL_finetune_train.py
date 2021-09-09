@@ -1,7 +1,7 @@
 '''
-Paper: Class Incremental Domain Adaptation for MTL-SD based Surgical Scene Understanding
-Authors: 
-Date: 
+Paper: Task-Aware Asynchronous MTL with  Class Incremental Contrastive Learning for Surgical Scene Understanding
+Lab: MMLAB
+Authors: Lalithkumar Seenivasan, Mobarakol Islam, Mengya Xu, Hongliang Ren
 '''
 
 import os
@@ -278,11 +278,15 @@ def train(epoch, lrc, model, dataloader, dict_dataloader_val, text_field):
 
 
 if __name__ == "__main__":
+
+    domain_adaptation = 'UDA'       # UDA / DA
+    current_domain = 'SD'           # SD / TD
+    load_checkpoint_domain = 'SD'   # SD / TD
     
-    os.environ["CUDA_VISIBLE_DEVICES"]="2"
+    os.environ["CUDA_VISIBLE_DEVICES"]="1"
     device = torch.device('cuda')
     
-    parser = argparse.ArgumentParser(description='Class_Incremental_Domain_Adaptation_for MTL_SD_based_Surgical_Scene_Understanding')
+    parser = argparse.ArgumentParser(description='Class_Incremental_Contrastive_Learning_for_Surgical_Scene_Understanding')
     ''' Hyperparams'''
     parser.add_argument('--batch_size',            type=int,       default=4)
     parser.add_argument('--workers',               type=int,       default=0)
@@ -317,43 +321,50 @@ if __name__ == "__main__":
     parser.add_argument('--gsu_w2v_loc',           type=str,       default='datasets/surgicalscene_word2vec.hdf5')
     
     ''' Unsupervised domain adaptation '''
-    # Source domain file dirs
-    parser.add_argument('--cp_features_path',      type=str,       default='datasets/instruments18/') 
-    parser.add_argument('--cp_annotation_folder',  type=str,       default='datasets/caption_annotations_SC_CBS/annotations_SD_base')
-    parser.add_argument('--gsu_img_dir',           type=str,       default='left_frames')
-    parser.add_argument('--gsu_file_dir',          type=str,       default='datasets/instruments18/')
-    # Target domain file dirs
-    #parser.add_argument('--cp_features_path',      type=str,       default='datasets/SGH_dataset_2020/') 
-    #parser.add_argument('--cp_annotation_folder',  type=str,       default='datasets/caption_annotations_SC_CBS/annotations_TD_base')
-    #parser.add_argument('--gsu_img_dir',           type=str,       default='resized_frames')
-    #parser.add_argument('--gsu_file_dir',          type=str,       default='datasets/SGH_dataset_2020/')
-    # UDA pre-trained checkpoint weights
-    parser.add_argument('--cp_checkpoint',         type=str,       default='checkpoints/c_checkpoints/SD_base_LOG/')
-    parser.add_argument('--gsu_checkpoint',        type=str,       default='checkpoints/g_checkpoints/da_ecbs_resnet18_09_SC_eCBS/da_ecbs_resnet18_09_SC_eCBS/epoch_train/checkpoint_D1230_epoch.pth')
-    parser.add_argument('--fe_modelpath',          type=str,       default='feature_extractor/checkpoint/incremental/inc_ResNet18_SC_CBS_0_012345678.pkl')
+    if domain_adaptation == 'UDA':
+        if current_domain == 'SD':
+            # #Source domain file dirs
+            parser.add_argument('--cp_features_path',      type=str,       default='datasets/instruments18/') 
+            parser.add_argument('--cp_annotation_folder',  type=str,       default='datasets/caption_annotations_SC_CBS/annotations_SD_base')
+            parser.add_argument('--gsu_img_dir',           type=str,       default='left_frames')
+            parser.add_argument('--gsu_file_dir',          type=str,       default='datasets/instruments18/')
+        elif current_domain == 'TD':
+            # #Target domain file dirs
+            parser.add_argument('--cp_features_path',      type=str,       default='datasets/SGH_dataset_2020/') 
+            parser.add_argument('--cp_annotation_folder',  type=str,       default='datasets/caption_annotations_SC_CBS/annotations_TD_base')
+            parser.add_argument('--gsu_img_dir',           type=str,       default='resized_frames')
+            parser.add_argument('--gsu_file_dir',          type=str,       default='datasets/SGH_dataset_2020/')
+        # UDA pre-trained checkpoint weights
+        parser.add_argument('--cp_checkpoint',         type=str,       default='checkpoints/c_checkpoints/SD_base_LOG/')
+        parser.add_argument('--gsu_checkpoint',        type=str,       default='checkpoints/g_checkpoints/da_ecbs_resnet18_09_SC_eCBS/da_ecbs_resnet18_09_SC_eCBS/epoch_train/checkpoint_D1230_epoch.pth')
+        parser.add_argument('--fe_modelpath',          type=str,       default='feature_extractor/checkpoint/incremental/inc_ResNet18_SC_CBS_0_012345678.pkl')
 
     ''' Incremental domain adaptation '''
-    # Source domain incremental file dirs
-    #parser.add_argument('--cp_features_path',      type=str,       default='datasets/instruments18/') 
-    #parser.add_argument('--cp_annotation_folder',  type=str,       default='datasets/caption_annotations_SC_CBS/annotations_SD_inc')
-    #parser.add_argument('--gsu_img_dir',           type=str,       default='left_frames')
-    #parser.add_argument('--gsu_file_dir',          type=str,       default='datasets/instruments18/')
-    # Target domain incremental file dirs
-    #parser.add_argument('--cp_features_path',      type=str,       default='datasets/SGH_dataset_2020/') 
-    #parser.add_argument('--cp_annotation_folder',  type=str,       default='datasets/caption_annotations_SC_CBS/annotations_TD_inc')
-    #parser.add_argument('--gsu_img_dir',           type=str,       default='resized_frames')
-    #parser.add_argument('--gsu_file_dir',          type=str,       default='datasets/SGH_dataset_2020/')
-    # Source domain incremental domain adaption pre-trained checkpoint weights    
-    #parser.add_argument('--cp_checkpoint',         type=str,       default='checkpoints/c_checkpoints/SD_inc_LOG/')
-    #parser.add_argument('--gsu_checkpoint',        type=str,       default='checkpoints/g_checkpoints/da_ecbs_resnet18_11_SC_eCBS/da_ecbs_resnet18_11_SC_eCBS/epoch_train/checkpoint_D1250_epoch.pth')
-    #parser.add_argument('--fe_modelpath',          type=str,       default='feature_extractor/checkpoint/incremental/inc_ResNet18_SC_CBS_0_012345678910.pkl')
-    # UDA pre-trained checkpoint weights
-    # Target domain incremental domain adaption pre-trained checkpoint weights    
-    #parser.add_argument('--cp_checkpoint',         type=str,       default='checkpoints/c_checkpoints/few_shot_TD_inc_LOG/')
-    #parser.add_argument('--gsu_checkpoint',        type=str,       default='checkpoints/g_checkpoints/da_ecbs_resnet18_11_SC_eCBS/da_ecbs_resnet18_11_SC_eCBS/epoch_train/checkpoint_D2210_epoch.pth')
-    #parser.add_argument('--fe_modelpath',          type=str,       default='feature_extractor/checkpoint/incremental/inc_ResNet18_SC_CBS_0_012345678910.pkl')
+    if domain_adaptation == 'DA':
+        if current_domain == 'SD':
+            # Source domain incremental file dirs
+            parser.add_argument('--cp_features_path',      type=str,       default='datasets/instruments18/') 
+            parser.add_argument('--cp_annotation_folder',  type=str,       default='datasets/caption_annotations_SC_CBS/annotations_SD_inc')
+            parser.add_argument('--gsu_img_dir',           type=str,       default='left_frames')
+            parser.add_argument('--gsu_file_dir',          type=str,       default='datasets/instruments18/')
+        elif current_domain == 'TD':
+            # Target domain incremental file dirs
+            parser.add_argument('--cp_features_path',      type=str,       default='datasets/SGH_dataset_2020/') 
+            parser.add_argument('--cp_annotation_folder',  type=str,       default='datasets/caption_annotations_SC_CBS/annotations_TD_inc')
+            parser.add_argument('--gsu_img_dir',           type=str,       default='resized_frames')
+            parser.add_argument('--gsu_file_dir',          type=str,       default='datasets/SGH_dataset_2020/')
+        if load_checkpoint_domain == 'SD':
+            # Source domain incremental domain adaption pre-trained checkpoint weights    
+            parser.add_argument('--cp_checkpoint',         type=str,       default='checkpoints/c_checkpoints/SD_inc_LOG/')
+            parser.add_argument('--gsu_checkpoint',        type=str,       default='checkpoints/g_checkpoints/da_ecbs_resnet18_11_SC_eCBS/da_ecbs_resnet18_11_SC_eCBS/epoch_train/checkpoint_D1250_epoch.pth')
+            parser.add_argument('--fe_modelpath',          type=str,       default='feature_extractor/checkpoint/incremental/inc_ResNet18_SC_CBS_0_012345678910.pkl')
+        elif load_checkpoint_domain == 'TD':
+            # Target domain incremental domain adaption pre-trained checkpoint weights    
+            parser.add_argument('--cp_checkpoint',         type=str,       default='checkpoints/c_checkpoints/few_shot_TD_inc_LOG/')
+            parser.add_argument('--gsu_checkpoint',        type=str,       default='checkpoints/g_checkpoints/da_ecbs_resnet18_11_SC_eCBS/da_ecbs_resnet18_11_SC_eCBS/epoch_train/checkpoint_D2210_epoch.pth')
+            parser.add_argument('--fe_modelpath',          type=str,       default='feature_extractor/checkpoint/incremental/inc_ResNet18_SC_CBS_0_012345678910.pkl')
 
-    parser.add_argument('--mtl_version',           type=str,       default='UDA_SC_CBS')
+    parser.add_argument('--mtl_version',           type=str,       default='MTL_FT_DA_SC_CBS')
     args = parser.parse_args()
     print(args)
 
@@ -404,11 +415,11 @@ if __name__ == "__main__":
     2) Scene graph module: pre-trained weights from optimization from stage 3
     3) Caption module: pre=trained weights from optimization from stage 4
     '''
-    model = build_model(args, text_field, device, load_pretrain=True)
-
+    model = build_model(args, text_field, device, load_pretrain=False)
+    
     '''================================= initial model evaluation ================================'''
     eval_mtl(model, dict_dataloader_val, text_field)
 
     '''Algorithm 1, Optimization Stage 5: Fine-tune the independently trained task model with combined loss'''
-    print('Learning_rate: ', args.lr)
+    # print('Learning_rate: ', args.lr)
     train(args.epoch, args.lr, model, train_dataloader, dict_dataloader_val, text_field)

@@ -1,5 +1,6 @@
-# Class Incremental Domain Adaptation for MTL-SD based Surgical Scene Understanding
-
+# Task-Aware Asynchronous MTL with  Class Incremental Contrastive Learning for Surgical Scene Understanding
+  Lalithkumar Seenivasan, Mobarakol Islam, Mengya Xu, Chwee Ming  Lim, Hongliang Ren
+  This work is submitted to RA-L/ICRA 2022, and is under review.
 <!---------------------------------------------------------------------------------------------------------------->
 
 
@@ -44,23 +45,36 @@ In this project, we implement our method using the Pytorch and DGL library and t
 - Ubuntu 16.04
 
 
+## Training
+### Run Training
+
+- Task-Aware MTL Optimization and fine-tuning (Algorithm 1)
+  - MTL:
+    - TA_aption_train.py (stage 3) (pending code documentation)
+    - TA_scene_graph_train.py (stage 4) (pending code documentation)
+  - TA_MTL_finetune_train.py (stage 5) (Pending code documentation)
+
+- Vanilla MTL (MTL-V)
+  - MTL_V_train.py (pending code documentation)
+
+- Knowledge Distillation-based MTL Optmization (Algorithm 2)
+  - MTL_KD_train.py (pending code documentation)
+
+- Knowledge Distillation-based MTL Optmization and fine-tuning
+  - MTL_KD_train.py (pending code documentation)
+  - MTL_KD_train.py (pending code documentation)
+
+
+## Evaluation
 ### Dataset
-#### Download feature extracted data for training and evalutation
-1. endovis challange 2018
-2. Download the pretrain word2vec model on [GoogleNews](https://code.google.com/archive/p/word2vec/) and put it into `datasets/word2vec` 
-
-### Training
-- Algorithm 1:
-  - scene_graph_train.py (stage 3)
-  - Caption_train.py (stage 4)
-  - MTL_train_finetune.py (stage 5)
-- Algorithm 2:
-  - MTL_KD_train.py
-- Checkpoints will be saved in `checkpoints/` folder.
-
-### Evaluation
+- Download validation dataset[To_be_released]() and palce them inside the folder `datasets/`
 - MTL_evaluation.py
-
+### checkpoint
+- Download checkpoints [To_be_released]() and place them inside the folder `checkpoints/`
+- 
+### running evaluation
+- MTL_evaluation.py
+  - Set mtl_version, adapt_type and domain
 
 ### Acknowledgement
 Code adopted and modified from :

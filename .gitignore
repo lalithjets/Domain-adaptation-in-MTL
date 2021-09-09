@@ -2,13 +2,12 @@
 .vscode/
 annotations_new/
 checkpoints/
+caption_visualization/
 datasets/
 feature_extractor/checkpoint
-log/
 old_depricated/
-results/
+result_log/
 venv/
-
 tmp*
 *.jar
 
