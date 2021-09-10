@@ -1,40 +1,31 @@
-# Task-Aware Asynchronous MTL with  Class Incremental Contrastive Learning for Surgical Scene Understanding
-  Lalithkumar Seenivasan, Mobarakol Islam, Mengya Xu, Chwee Ming  Lim, Hongliang Ren
-  
-  This work is submitted to RA-L/ICRA 2022, and is under review.
-<!---------------------------------------------------------------------------------------------------------------->
+<div align="center">
 
+<samp>
 
-<!---------------------------------------------------------------------------------------------------------------->
+<h1> Task-Aware Asynchronous MTL with  Class Incremental Contrastive Learning for Surgical Scene Understanding </h1>
+
+<h3> Lalithkumar Seenivasan, Mobarakol Islam, Mengya Xu, Chwee Ming  Lim, Hongliang Ren </h3>
+
+</samp>   
+
+---
+Manuscript submitted to RA-L/ICRA 2022, under review.
+---
+
+</div>     
+    
+---
 ## Feature Extractor
 To be added
-<!---------------------------------------------------------------------------------------------------------------->
 ## Scene graph
-<!---------------------------------------------------------------------------------------------------------------->
 To be added
-<!---------------------------------------------------------------------------------------------------------------->
 
 ## Caption
-<!---------------------------------------------------------------------------------------------------------------->
 To be added
+
 ## Domain adaptation
-<!---------------------------------------------------------------------------------------------------------------->
-<!---------------------------------------------------------------------------------------------------------------->
 
-## Code Overview
-<!---------------------------------------------------------------------------------------------------------------->
-In this project, we implement our method using the Pytorch and DGL library and there are three main folders: 
-
-- `data/`: .
-- `datasets/`: Contains the dataset needed to train the network.
-- `checkpoints/`: Conatins trained weights
-- `evaluation/`: Contains utility tools for evaluation.
-- `Feature_extractor/`: Used to extract features from dataset images to train the scene graph and caption network for algorithm 1, stage 3 & 4.
-- `models/`: Contains network models.
-- `utils/`: Contains utility tools used for training and evaluation.
-
-<!---------------------------------------------------------------------------------------------------------------->
-
+---
 ## Library Prerequisities.
 
 ### DGL
@@ -47,6 +38,20 @@ In this project, we implement our method using the Pytorch and DGL library and t
 - CUDA 10.0
 - Ubuntu 16.04
 
+---
+
+## Code Overview
+In this project, we implement our method using the Pytorch and DGL library and there are three main folders: 
+
+- `data/`: .
+- `datasets/`: Contains the dataset needed to train the network.
+- `checkpoints/`: Conatins trained weights
+- `evaluation/`: Contains utility tools for evaluation.
+- `Feature_extractor/`: Used to extract features from dataset images to train the scene graph and caption network for algorithm 1, stage 3 & 4.
+- `models/`: Contains network models.
+- `utils/`: Contains utility tools used for training and evaluation.
+
+---
 
 ## Training
 ### Run Training
@@ -67,6 +72,7 @@ In this project, we implement our method using the Pytorch and DGL library and t
   - MTL_KD_train.py (pending code documentation)
   - MTL_KD_train.py (pending code documentation)
 
+---
 
 ## Evaluation
 ### Dataset
@@ -79,7 +85,9 @@ In this project, we implement our method using the Pytorch and DGL library and t
 - MTL_evaluation.py
   - Set mtl_version, adapt_type and domain
 
-### Acknowledgement
+---
+
+## Acknowledgement
 Code adopted and modified from :
 1. Visual-Semantic Graph Attention Network for Human-Object Interaction Detecion
     - Paper [Visual-Semantic Graph Attention Network for Human-Object Interaction Detecion](https://arxiv.org/abs/2001.02302).
@@ -90,3 +98,5 @@ Code adopted and modified from :
 3. Curriculum by smoothing
     - Paper [Curriculum by smoothing](https://arxiv.org/pdf/2003.01367.pdf).
     - Pytorch implementation [code](https://github.com/pairlab/CBS).
+
+---
