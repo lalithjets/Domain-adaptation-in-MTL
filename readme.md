@@ -9,7 +9,7 @@
 </samp>   
 
 ---
-Manuscript submitted to RA-L/ICRA 2022, under review.
+Manuscript submitted and under review.
 ---
 
 </div>     
